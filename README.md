@@ -37,8 +37,7 @@ to immutable commits.
 
    ```text
    lake update
-   cd docbuild
-   MATHLIB_NO_CACHE_ON_UPDATE=1 lake update
+   (cd docbuild && MATHLIB_NO_CACHE_ON_UPDATE=1 lake update)
    ```
 
 6. Run the same checks as CI:
@@ -47,6 +46,7 @@ to immutable commits.
    lake exe cache get
    lake build
    (cd docbuild && lake build PalomarTemplate:docs)
+   ! grep -n 'TEMPLATE:' formalization.yaml
    ./scripts/verify-comparator.sh
    ```
 

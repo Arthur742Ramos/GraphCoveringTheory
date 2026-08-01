@@ -10,6 +10,14 @@ lean4export_dir="$cache_root/lean4export"
 comparator_commit=68a064109f01c08f47c8edc9f51d6a2bbffaa188
 lean4export_commit=4e7915201d3f9f04470d9eae002fa695f7cdc589
 landrun_commit=811cfff51ceaf3d9843708aa6d22e9b84ccac8b4
+expected_toolchain=leanprover/lean4:v4.32.0
+
+actual_toolchain=$(tr -d '[:space:]' < "$repository_root/lean-toolchain")
+if [ "$actual_toolchain" != "$expected_toolchain" ]; then
+  echo "error: no pinned lean4export revision is configured for $actual_toolchain" >&2
+  echo "update the tool pins for the new Lean toolchain before running Comparator" >&2
+  exit 1
+fi
 
 for required_command in git go lake; do
   if ! command -v "$required_command" >/dev/null 2>&1; then

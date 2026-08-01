@@ -26,6 +26,7 @@ status:
   scope: >-
     TEMPLATE: state exactly what is and is not formalized, including any weaker
     theorem, changed hypotheses, or omitted material.
+  # Count the proof development, excluding Challenge.lean's deliberate sorry.
   sorry_count: 0
   sorry_in_definitions: 0
   axioms: []

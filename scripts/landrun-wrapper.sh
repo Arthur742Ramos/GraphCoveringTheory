@@ -21,6 +21,10 @@ while [ "$#" -gt 0 ]; do
       landrun_options+=("$1" "$2")
       shift 2
       ;;
+    -*)
+      echo "error: unrecognized Landrun option $1; update scripts/landrun-wrapper.sh" >&2
+      exit 2
+      ;;
     *)
       break
       ;;
