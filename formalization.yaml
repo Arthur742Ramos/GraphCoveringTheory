@@ -1,0 +1,72 @@
+# formalization.yaml v0.3. Replace every TEMPLATE value before submitting.
+version: "v0.3"
+
+project:
+  name: "TEMPLATE: name of the formalization"
+  authors:
+    - "TEMPLATE: formalizer name"
+  license: "MIT"
+
+classification:
+  # Replace these with 1–2 arXiv categories and 1–8 MSC 2020 codes for the result.
+  arxiv: ["math.LO"]
+  msc2020: ["03B35"]
+
+sources:
+  - title: "TEMPLATE: title of the mathematical source"
+    authors:
+      - "TEMPLATE: source author"
+    id: "https://example.com/replace-with-a-versioned-source"
+    type: "TEMPLATE: paper, preprint, textbook, or original result"
+    license: "TEMPLATE: source license or unknown"
+    author_contacted: "n/a"
+    prior_work: "TEMPLATE: earlier formalization URL or none known"
+
+status:
+  scope: >-
+    TEMPLATE: state exactly what is and is not formalized, including any weaker
+    theorem, changed hypotheses, or omitted material.
+  sorry_count: 0
+  sorry_in_definitions: 0
+  axioms: []
+  main_results:
+    - declaration: "PalomarTemplate.main_result"
+      file: "Solution.lean"
+      sorry_count: 0
+      axioms: []
+      comparator_config: "comparator.json"
+      literature_dependencies: []
+
+automation:
+  methods:
+    - method: "manual"
+      models: []
+      framework: ""
+      tool_setup: "TEMPLATE: editors, tactics, agents, or other tools used"
+      cost:
+        wall_time: "TEMPLATE: approximate elapsed effort"
+        spend_usd: "TEMPLATE: amount, subscription-based, or not tracked"
+        hardware: "TEMPLATE: local machine, API-only, or other"
+      prompting_notes: "TEMPLATE: representative prompting notes, or n/a"
+  spend_usd: "TEMPLATE: total amount, subscription-based, or not tracked"
+  notes: "TEMPLATE: describe the overall human and automation workflow"
+
+fidelity:
+  divergences: "TEMPLATE: all known divergences from the cited source, or none known"
+
+review:
+  status: "self-assessed"
+  reviewers:
+    - "TEMPLATE: reviewer name, or none"
+  notes: "TEMPLATE: describe statement audits and mathematical review performed"
+
+alignment:
+  namespace: "PalomarTemplate"
+  statements:
+    - source: "TEMPLATE: source theorem or section"
+      lean: "PalomarTemplate.main_result"
+      module: "Solution"
+      status: "proved"
+      note: "TEMPLATE: explain the correspondence and any qualifications"
+
+acknowledgements: "TEMPLATE: libraries, tools, and people to credit"
