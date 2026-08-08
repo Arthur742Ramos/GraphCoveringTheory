@@ -15,7 +15,7 @@ concurrency:
 
 jobs:
   license:
-    name: Check Apache licence default
+    name: Check metadata and Apache licence default
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
@@ -24,6 +24,14 @@ jobs:
       - uses: ruby/setup-ruby@95ef2b042f9d7a56d8268cba8559e2842e2ad01b
         with:
           ruby-version: "3.3.12"
+      - name: Test the metadata validator
+        run: ruby test/validate_formalization_test.rb
+      - name: Check the canonical template sentinel surface
+        if: github.repository == 'PalomarRegistry/PalomarTemplate' || github.event.repository.parent.full_name == 'PalomarRegistry/PalomarTemplate'
+        run: ruby scripts/validate-formalization.rb --expect-template
+      - name: Reject retained template values in a derived repository
+        if: github.repository != 'PalomarRegistry/PalomarTemplate' && github.event.repository.parent.full_name != 'PalomarRegistry/PalomarTemplate'
+        run: ruby scripts/validate-formalization.rb
       - name: Detect the repository licence
         run: |
           gem install licensee --version 10.0.0 --no-document
