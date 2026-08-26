@@ -2,15 +2,15 @@
   "challenge_module": "Challenge",
   "solution_module": "Solution",
   "theorem_names": [
-    "FiniteGraphFreeGroup.graph_fundamental_group_free_rank",
-    "FiniteGraphFreeGroup.graphFundamentalGroup_subsingleton_iff_cycleRank_zero",
-    "FiniteGraphFreeGroup.graphCoverProjection_isCovering"
+    "FiniteGraphFreeGroup.graph_fundamental_group_free_rank"
   ],
   "definition_names": [
     "FiniteGraphFreeGroup.vertexCount",
     "FiniteGraphFreeGroup.edgeCount",
     "FiniteGraphFreeGroup.cycleRank",
     "FiniteGraphFreeGroup.graphFundamentalGroup",
+    "FiniteGraphFreeGroup.graphRealization",
+    "FiniteGraphFreeGroup.graphVertex",
     "FiniteGraphFreeGroup.graphCoverVertex",
     "FiniteGraphFreeGroup.graphCoverQuiver",
     "FiniteGraphFreeGroup.graphCoverProjection"

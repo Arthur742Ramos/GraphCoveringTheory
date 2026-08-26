@@ -1,13 +1,12 @@
-import FiniteGraphFreeGroup.Consequences
-import FiniteGraphFreeGroup.Cover
-import FiniteGraphFreeGroup.Realization
+import FiniteGraphFreeGroup.TopologicalComparison
+
+open CategoryTheory CategoryTheory.SingleObj Quiver FreeGroup
 
 /-!
 # Proved solution
 
-This module may import the full proof development. Comparator checks that the
-declaration below has exactly the same statement as its counterpart in
-`Challenge.lean` and uses only the permitted axioms.
+The comparator-facing theorem is stated independently in `Challenge.lean` and
+proved here from the explicit topological/combinatorial equivalence.
 -/
 
 universe u
@@ -16,8 +15,8 @@ namespace FiniteGraphFreeGroup
 
 theorem graph_fundamental_group_free_rank {V : Type u} [Quiver.{u} V]
     [Fintype V] [FiniteQuiver V] [WeaklyConnected V] (root : V) :
-    Nonempty (graphFundamentalGroup root ≃*
+    Nonempty (FundamentalGroup (graphRealization V) (graphVertex root) ≃*
       FreeGroup (Fin (edgeCount (V := V) + 1 - vertexCount (V := V)))) := by
-  exact proved_graph_fundamental_group_free_rank root
+  exact proved_topological_fundamental_group_free_rank root
 
 end FiniteGraphFreeGroup

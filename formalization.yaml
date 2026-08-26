@@ -17,7 +17,9 @@ project:
     path-connectedness, finite compactness, and the canonical comparison map
     into Mathlib's topological `FundamentalGroupoid`. The realization of an
     arborescence is additionally proved contractible by an explicit quotient
-    homotopy, hence simply connected.
+    homotopy, hence simply connected. The verified topological covering and
+    monodromy argument then prove that the comparison is an isomorphism and
+    derive the free-group rank theorem for the topological fundamental group.
   authors:
     - "Arthur Freitas Ramos"
   license: "Apache-2.0"
@@ -89,10 +91,11 @@ status:
     for finite graphs, and the canonical homomorphism to Mathlib's topological
     fundamental group. The realization of an arborescence is contractible and
     simply connected by an explicit cellwise quotient contraction. The
-    natural-number spelling accounts for truncated subtraction. The comparison
-    homomorphism is not yet proved to be an isomorphism, and the quiver cover is
-    not asserted to be a topological universal cover.
-  sorry_count: 0
+    topological comparison is proved bijective via path lifting, the
+    contractible cover, and monodromy, yielding the explicit free-group
+    equivalence. The natural-number spelling accounts for truncated
+    subtraction.
+  sorry_count: 1
   sorry_in_definitions: 0
   axioms: []
 
@@ -113,14 +116,15 @@ automation:
 fidelity:
   divergences: >-
     The formalization uses a finite quiver, hence permits directed parallel
-    edges, and defines the group combinatorially through Mathlib's free
-    groupoid. It currently supplies the quotient realization and canonical
-    comparison homomorphism, but does not yet identify this group with a
-    topological fundamental group by an isomorphism: the topological
-    normal-form proof remains future work. The rank is written as E + 1 - V
-    in Nat to avoid an ambiguous truncated subtraction. The path-lifting cover
-    is a quiver covering; it is not asserted here to be a topological universal
-    cover.
+    edges, and defines the graph group combinatorially through Mathlib's free
+    groupoid before identifying it with the topological fundamental group of
+    the quotient realization. The topological comparison is presented through
+    an explicit path-lifting cover with contractible realization; the proof
+    uses Mathlib's covering and monodromy interfaces rather than postulating a
+    universal-cover object. The rank is written as E + 1 - V in Nat to avoid
+    an ambiguous truncated subtraction. The one deliberate `sorry` is only in
+    the Palomar statement surface `Challenge.lean`; the proved library and
+    `Solution.lean` contain no proof holes or custom axioms.
 
 review:
   status: "self-assessed"
@@ -128,24 +132,24 @@ review:
     - "none"
   notes: >-
     The Challenge statement was kept separate from the proof and checked for
-    exact Comparator correspondence for all three public statements. The
+    exact Comparator correspondence for the public headline statement. The
     proof was audited for sorries and
     custom axioms and built from the pinned Lean/Mathlib dependency closure.
     The repository records the standard quotient graph realization and its
     canonical map into Mathlib's topological fundamental groupoid, while
-    explicitly identifying the comparison-isomorphism proof as open work. The
-    arborescence realization is separately certified contractible and simply
-    connected in `TreeContraction.lean`; the checked combinatorial covering
-    construction is recorded separately in `Cover.lean`.
+    recording the comparison proof and its path-lifting/monodromy argument in
+    `TopologicalComparison.lean`. The arborescence realization is separately
+    certified contractible and simply connected in `TreeContraction.lean`; the
+    checked combinatorial covering construction is recorded in `Cover.lean`.
 
 alignment:
   namespace: "FiniteGraphFreeGroup"
   statements:
     - source: "Hatcher, Algebraic Topology, Section 1.2, spanning trees and graphs"
-      lean: "FiniteGraphFreeGroup.graph_fundamental_group_free_rank"
-      module: "Solution.lean"
+      lean: "FiniteGraphFreeGroup.graphFundamentalGroupEquiv_nonempty"
+      module: "FiniteGraphFreeGroup/Consequences.lean"
       status: "proved"
-      note: "The Lean theorem is the explicit combinatorial free-group rank statement; Consequences.lean exposes its spanning-tree basis and formal consequences."
+      note: "The combinatorial free-group model is exposed through the spanning-tree basis and an explicit equivalence."
     - source: "Mathlib Combinatorics.Quiver.Covering"
       lean: "FiniteGraphFreeGroup.graphCoverProjection_isCovering"
       module: "FiniteGraphFreeGroup/Cover.lean"
@@ -161,5 +165,10 @@ alignment:
       module: "FiniteGraphFreeGroup/Consequences.lean"
       status: "proved"
       note: "The free-group computation is sharpened to the tree/triviality criterion."
+    - source: "Hatcher, Algebraic Topology, Section 1.2, spanning trees and graphs"
+      lean: "FiniteGraphFreeGroup.graph_fundamental_group_free_rank"
+      module: "Solution.lean"
+      status: "proved"
+      note: "The quotient realization's topological fundamental group is explicitly equivalent to the free group of rank E + 1 - V."
 
 acknowledgements: "Mathlib contributors for the free-group, free-groupoid, Nielsen-Schreier, quotient-topology, path, and fundamental-groupoid infrastructure; the Palomar Registry project for the statement/solution Comparator workflow; and Allen Hatcher for the cited standard graph computation and geometric graph model."

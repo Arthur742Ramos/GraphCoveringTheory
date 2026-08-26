@@ -124,6 +124,35 @@ theorem graphRealizationEndpointLabelQuotient_vertex {V : Type u} [Quiver.{u} V]
     graphRealizationEndpointLabelQuotient (graphVertex v) = some v := by
   rfl
 
+theorem graphRealization_isOpen_iff {V : Type u} [Quiver.{u} V]
+    {s : Set (graphRealization V)} :
+    IsOpen s ↔ IsOpen (graphRealizationQuotient ⁻¹' s) := by
+  exact isOpen_coinduced
+
+theorem graphRealization_image_preimage_eq_of_saturated
+    {V : Type u} [Quiver.{u} V] {s : Set (graphRealizationPre V)}
+    (hs : ∀ {x y : graphRealizationPre V},
+      Relation.EqvGen (graphRealizationGenerator (V := V)) x y →
+        (x ∈ s ↔ y ∈ s)) :
+    graphRealizationQuotient ⁻¹' (graphRealizationQuotient '' s) = s := by
+  ext x
+  constructor
+  · rintro ⟨y, hy, hxy⟩
+    exact (hs (Quotient.exact hxy)).mp hy
+  · intro hx
+    exact ⟨x, hx, rfl⟩
+
+theorem graphRealization_image_isOpen_of_saturated
+    {V : Type u} [Quiver.{u} V] {s : Set (graphRealizationPre V)}
+    (hs : ∀ {x y : graphRealizationPre V},
+      Relation.EqvGen (graphRealizationGenerator (V := V)) x y →
+        (x ∈ s ↔ y ∈ s))
+    (hopen : IsOpen s) :
+    IsOpen (graphRealizationQuotient '' s) := by
+  rw [graphRealization_isOpen_iff,
+    graphRealization_image_preimage_eq_of_saturated hs]
+  exact hopen
+
 /-- The characteristic path of the interval cell associated to an edge. -/
 def graphEdgePath {V : Type u} [Quiver.{u} V] (e : Quiver.Total V) :
     C(I, graphRealization V) where
@@ -270,6 +299,94 @@ theorem graphFreeGroupoidToTopological_restrict {V : Type u} [Quiver.{u} V] :
       (graphFreeGroupoidToTopological (V := V)).toPrefunctor) =
       graphRealizationQuiverMap (V := V) := by
   exact Quiver.FreeGroupoid.lift_spec (graphRealizationQuiverMap (V := V))
+
+/-! A quiver map acts on the realization cell by cell.  This is the map used
+    below for the realization of the path-lifting cover. -/
+
+def graphRealizationPreMap {V W : Type u} [Quiver.{u} V] [Quiver.{u} W]
+    (F : V ⥤q W) : graphRealizationPre V → graphRealizationPre W :=
+  Sum.elim
+    (fun v => Sum.inl (graphDiscreteVertex (F.obj (graphVertexUnderlying v))))
+    (fun z =>
+      let e := graphEdgeUnderlying z.1
+      Sum.inr ⟨graphDiscreteEdge ⟨F.obj e.left, F.obj e.right, F.map e.hom⟩, z.2⟩)
+
+theorem graphRealizationPreMap_generator {V W : Type u} [Quiver.{u} V]
+    [Quiver.{u} W] (F : V ⥤q W) {x y : graphRealizationPre V}
+    (h : graphRealizationGenerator x y) :
+    graphRealizationGenerator (graphRealizationPreMap F x)
+      (graphRealizationPreMap F y) := by
+  cases h with
+  | source e =>
+      exact graphRealizationGenerator.source
+        ⟨F.obj e.left, F.obj e.right, F.map e.hom⟩
+  | target e =>
+      exact graphRealizationGenerator.target
+        ⟨F.obj e.left, F.obj e.right, F.map e.hom⟩
+
+theorem graphRealizationPreMap_eqvGen {V W : Type u} [Quiver.{u} V]
+    [Quiver.{u} W] (F : V ⥤q W) {x y : graphRealizationPre V}
+    (h : Relation.EqvGen (graphRealizationGenerator (V := V)) x y) :
+    Relation.EqvGen (graphRealizationGenerator (V := W))
+      (graphRealizationPreMap F x) (graphRealizationPreMap F y) := by
+  induction h with
+  | rel x y h => exact Relation.EqvGen.rel _ _ (graphRealizationPreMap_generator F h)
+  | refl x => exact Relation.EqvGen.refl _
+  | symm x y h ih => exact Relation.EqvGen.symm _ _ ih
+  | trans x y z hxy hyz ihxy ihyz => exact Relation.EqvGen.trans _ _ _ ihxy ihyz
+
+def graphRealizationMap {V W : Type u} [Quiver.{u} V] [Quiver.{u} W]
+    (F : V ⥤q W) : graphRealization V → graphRealization W := by
+  let f : graphRealizationPre V → graphRealization W :=
+    fun x => graphRealizationQuotient (graphRealizationPreMap F x)
+  refine Quotient.lift f (fun x y h => ?_)
+  exact Quotient.sound (graphRealizationPreMap_eqvGen F h)
+
+theorem continuous_graphRealizationMap {V W : Type u} [Quiver.{u} V]
+    [Quiver.{u} W] (F : V ⥤q W) :
+    Continuous (graphRealizationMap F) := by
+  let f : graphRealizationPre V → graphRealization W :=
+    fun x => graphRealizationQuotient (graphRealizationPreMap F x)
+  have hcont : Continuous (graphRealizationPreMap F) := by
+    apply continuous_sumElim.2
+    constructor
+    · exact continuous_inl.comp continuous_of_discreteTopology
+    · apply continuous_inr.comp
+      apply continuous_sigma
+      intro e
+      change Continuous (fun t : I =>
+        (⟨graphDiscreteEdge
+            ⟨F.obj (graphEdgeUnderlying e).left,
+              F.obj (graphEdgeUnderlying e).right,
+              F.map (graphEdgeUnderlying e).hom⟩, t⟩ :
+          Σ _e : WithDiscreteTopology (Quiver.Total W), I))
+      exact (continuous_sigmaMk (i := graphDiscreteEdge
+        ⟨F.obj (graphEdgeUnderlying e).left,
+          F.obj (graphEdgeUnderlying e).right,
+          F.map (graphEdgeUnderlying e).hom⟩)).comp continuous_id
+  have hf : Continuous f := continuous_quotient_mk'.comp hcont
+  change Continuous (Quotient.lift f _)
+  apply hf.quotient_lift
+
+@[simp]
+theorem graphRealizationMap_vertex {V W : Type u} [Quiver.{u} V]
+    [Quiver.{u} W] (F : V ⥤q W) (v : V) :
+    graphRealizationMap F (graphVertex v) = graphVertex (F.obj v) := by
+  rfl
+
+@[simp]
+theorem graphRealizationMap_edgePath {V W : Type u} [Quiver.{u} V]
+    [Quiver.{u} W] (F : V ⥤q W) (e : Quiver.Total V) (t : I) :
+    graphRealizationMap F (graphEdgePath e t) =
+      graphEdgePath ⟨F.obj e.left, F.obj e.right, F.map e.hom⟩ t := by
+  rfl
+
+theorem graphRealizationMap_forwardPath {V W : Type u} [Quiver.{u} V]
+    [Quiver.{u} W] (F : V ⥤q W) {a b : V} (e : a ⟶ b) :
+    (graphRealizationMap F) ∘ (graphRealizationForwardPath e) =
+      graphRealizationForwardPath (F.map e) := by
+  ext t
+  rfl
 
 /-! Taking the endomorphism group at a chosen vertex gives the canonical
     comparison homomorphism on fundamental groups.  The present file proves
