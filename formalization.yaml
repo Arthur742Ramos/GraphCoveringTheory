@@ -15,7 +15,9 @@ project:
     standard quotient realization by interval edge-cells. The geometric layer
     proves its endpoint invariant, vertex injectivity, edge paths,
     path-connectedness, finite compactness, and the canonical comparison map
-    into Mathlib's topological `FundamentalGroupoid`.
+    into Mathlib's topological `FundamentalGroupoid`. The realization of an
+    arborescence is additionally proved contractible by an explicit quotient
+    homotopy, hence simply connected.
   authors:
     - "Arthur Freitas Ramos"
   license: "Apache-2.0"
@@ -85,10 +87,11 @@ status:
     includes endpoint-label invariance, injective vertex points, explicit
     edge-cell paths, path-connectedness under weak connectivity, compactness
     for finite graphs, and the canonical homomorphism to Mathlib's topological
-    fundamental group. The natural-number spelling accounts for truncated
-    subtraction. The comparison homomorphism is not yet proved to be an
-    isomorphism, and the quiver cover is not asserted to be a topological
-    universal cover.
+    fundamental group. The realization of an arborescence is contractible and
+    simply connected by an explicit cellwise quotient contraction. The
+    natural-number spelling accounts for truncated subtraction. The comparison
+    homomorphism is not yet proved to be an isomorphism, and the quiver cover is
+    not asserted to be a topological universal cover.
   sorry_count: 0
   sorry_in_definitions: 0
   axioms: []
@@ -130,9 +133,10 @@ review:
     custom axioms and built from the pinned Lean/Mathlib dependency closure.
     The repository records the standard quotient graph realization and its
     canonical map into Mathlib's topological fundamental groupoid, while
-    explicitly identifying the comparison-isomorphism proof as open work; the
-    checked combinatorial covering construction is recorded separately in
-    `Cover.lean`.
+    explicitly identifying the comparison-isomorphism proof as open work. The
+    arborescence realization is separately certified contractible and simply
+    connected in `TreeContraction.lean`; the checked combinatorial covering
+    construction is recorded separately in `Cover.lean`.
 
 alignment:
   namespace: "FiniteGraphFreeGroup"
@@ -147,6 +151,11 @@ alignment:
       module: "FiniteGraphFreeGroup/Cover.lean"
       status: "proved"
       note: "The path-lifting projection has explicit bijections on every star and costar."
+    - source: "Mathlib AlgebraicTopology.FundamentalGroupoid.SimplyConnected"
+      lean: "FiniteGraphFreeGroup.graphRealization_tree_simplyConnected"
+      module: "FiniteGraphFreeGroup/TreeContraction.lean"
+      status: "proved"
+      note: "An explicit quotient homotopy contracts the interval-cell realization of every arborescence to its root, and Mathlib derives simple connectedness."
     - source: "Hatcher, Algebraic Topology, Section 1.2, spanning trees and graphs"
       lean: "FiniteGraphFreeGroup.graphFundamentalGroup_subsingleton_iff_cycleRank_zero"
       module: "FiniteGraphFreeGroup/Consequences.lean"

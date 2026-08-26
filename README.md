@@ -43,6 +43,12 @@ functor from the free groupoid to Mathlib's topological `FundamentalGroupoid`
 and the induced homomorphism
 `graphCombinatorialToTopological`.
 
+The `FiniteGraphFreeGroup.TreeContraction` layer proves the geometric tree
+lemma needed by a universal-cover approach: the quotient realization of any
+directed arborescence is contractible by an explicit continuous cellwise
+contraction, and hence is simply connected. The contraction is kernel-checked
+through the quotient topology; it is not an assumption about the realization.
+
 The comparison homomorphism is deliberately not advertised as an isomorphism
 yet: proving surjectivity and injectivity requires a separate topological
 normal-form theorem for arbitrary continuous paths and homotopies in this
@@ -61,6 +67,9 @@ combinatorial rank theorem and the proved geometric realization distinct.
 - `FiniteGraphFreeGroup/Realization.lean` defines the geometric realization,
   its basic path geometry, and the canonical comparison map to topological
   fundamental groups.
+- `FiniteGraphFreeGroup/TreeContraction.lean` proves contractibility and
+  simple connectedness of arborescence realizations by an explicit quotient
+  homotopy.
 - `comparator.json` records the declarations checked for exact correspondence.
 - `formalization.yaml` records scope, provenance, authorship, and review status.
 

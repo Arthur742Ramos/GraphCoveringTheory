@@ -1,3 +1,4 @@
 import FiniteGraphFreeGroup.Consequences
 import FiniteGraphFreeGroup.Cover
 import FiniteGraphFreeGroup.Realization
+import FiniteGraphFreeGroup.TreeContraction
