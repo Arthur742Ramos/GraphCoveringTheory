@@ -22,9 +22,13 @@ project:
     derive the free-group rank theorem for the topological fundamental group.
   authors:
     - "Arthur Freitas Ramos"
+    - "David Hulak"
+    - "Ruy de Queiroz"
   license: "Apache-2.0"
   responsible_maintainers:
     - "Arthur Freitas Ramos"
+    - "David Hulak"
+    - "Ruy de Queiroz"
 
 classification:
   arxiv: ["math.AT", "math.LO"]
