@@ -1,11 +1,11 @@
-# Finite graph fundamental groups: an explicit spanning-tree basis
+# Finite graph fundamental groups: combinatorial and geometric models
 
 This repository formalizes the spanning-tree computation for a finite
 connected graph. A graph is represented as a finite directed multigraph
 (Mathlib `Quiver`), so directed parallel edges and loops are allowed;
 connectivity is imposed after symmetrizing the edges. For a chosen root, the
-formal object is the endomorphism group in Mathlib's free groupoid on the
-graph.
+combinatorial object is the endomorphism group in Mathlib's free groupoid on
+the graph.
 
 The main result is an explicit group equivalence:
 
@@ -32,11 +32,22 @@ The reusable API also provides:
 - `graphCoverProjection`, a path-lifting quiver whose star and costar maps are
   proved bijective, hence a Mathlib quiver covering.
 
-This is deliberately a combinatorial fundamental-groupoid formalization. It
-does not define a topological realization of an arbitrary quiver, and it does
-not claim that the displayed group is already Mathlib's topological
-`FundamentalGroup` of a geometric realization. That comparison is a separate
-future development.
+The geometric layer in `FiniteGraphFreeGroup.Realization` now defines the
+standard quotient realization: one discrete vertex for each graph vertex and
+one copy of the unit interval for each edge, with interval endpoints attached
+to the corresponding source and target vertices. It proves the endpoint-label
+invariant and injectivity of the vertex inclusion, constructs the edge and
+symmetrized-quiver paths, proves path-connectedness under weak connectivity,
+and proves compactness for finite graphs. It also constructs the canonical
+functor from the free groupoid to Mathlib's topological `FundamentalGroupoid`
+and the induced homomorphism
+`graphCombinatorialToTopological`.
+
+The comparison homomorphism is deliberately not advertised as an isomorphism
+yet: proving surjectivity and injectivity requires a separate topological
+normal-form theorem for arbitrary continuous paths and homotopies in this
+finite one-dimensional quotient. The repository therefore keeps the proved
+combinatorial rank theorem and the proved geometric realization distinct.
 
 ## Repository map
 
@@ -47,6 +58,9 @@ future development.
   consequences of the computation.
 - `FiniteGraphFreeGroup/Cover.lean` defines and verifies the path-lifting
   covering construction.
+- `FiniteGraphFreeGroup/Realization.lean` defines the geometric realization,
+  its basic path geometry, and the canonical comparison map to topological
+  fundamental groups.
 - `comparator.json` records the declarations checked for exact correspondence.
 - `formalization.yaml` records scope, provenance, authorship, and review status.
 

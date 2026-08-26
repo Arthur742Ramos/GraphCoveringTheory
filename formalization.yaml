@@ -2,7 +2,7 @@
 version: "v0.4"
 
 project:
-  name: "Finite graph fundamental groups: an explicit spanning-tree basis"
+  name: "Finite graph fundamental groups: combinatorial and geometric models"
   description: >-
     Formalizes the spanning-tree computation for the combinatorial fundamental
     group of a finite weakly connected directed multigraph. The endomorphism
@@ -11,8 +11,11 @@ project:
     `FreeGroup (Fin (E + 1 - V))`. The development also proves the cycle-rank
     identities, root-change equivalences, the tree/triviality criterion, and
     the corresponding abelianization statement. It additionally constructs a
-    path-lifting quiver and verifies its covering property. No topological
-    realization is formalized.
+    path-lifting quiver and verifies its covering property, and defines the
+    standard quotient realization by interval edge-cells. The geometric layer
+    proves its endpoint invariant, vertex injectivity, edge paths,
+    path-connectedness, finite compactness, and the canonical comparison map
+    into Mathlib's topological `FundamentalGroupoid`.
   authors:
     - "Arthur Freitas Ramos"
   license: "Apache-2.0"
@@ -46,6 +49,12 @@ sources:
     relationship: "adapts"
     note: "The combinatorial fundamental group is the vertex group in Mathlib's free groupoid, whose universal property supplies the path reduction and functorial infrastructure."
     license: "Apache-2.0"
+  - title: "Mathlib AlgebraicTopology.FundamentalGroupoid.FundamentalGroup"
+    type: "formalization"
+    location: "https://github.com/leanprover-community/mathlib4/blob/v4.32.0/Mathlib/AlgebraicTopology/FundamentalGroupoid/FundamentalGroup.lean"
+    relationship: "adapts"
+    note: "The geometric layer targets Mathlib's topological fundamental group and uses its path-homotopy quotient and induced homomorphism API."
+    license: "Apache-2.0"
   - title: "Mathlib Combinatorics.Quiver.Arborescence"
     type: "formalization"
     location: "https://github.com/leanprover-community/mathlib4/blob/v4.32.0/Mathlib/Combinatorics/Quiver/Arborescence.lean"
@@ -70,11 +79,16 @@ status:
     proves its cardinality, and derives the explicit free-group, root-change,
     cycle-rank, triviality, and abelianization results. It also constructs a
     path-lifting quiver over the graph and proves the projection is a quiver
-    covering by explicit star and costar equivalences. The natural-number
-    spelling accounts for truncated subtraction. A topological graph
-    realization, a comparison with Mathlib's topological `FundamentalGroup`,
-    and the theorem that this cover is a connected simply connected universal
-    cover are not formalized.
+    covering by explicit star and costar equivalences. The geometric
+    realization is the quotient of the discrete vertex summand and one unit
+    interval per edge, with the two endpoint identifications. Its proved API
+    includes endpoint-label invariance, injective vertex points, explicit
+    edge-cell paths, path-connectedness under weak connectivity, compactness
+    for finite graphs, and the canonical homomorphism to Mathlib's topological
+    fundamental group. The natural-number spelling accounts for truncated
+    subtraction. The comparison homomorphism is not yet proved to be an
+    isomorphism, and the quiver cover is not asserted to be a topological
+    universal cover.
   sorry_count: 0
   sorry_in_definitions: 0
   axioms: []
@@ -97,11 +111,13 @@ fidelity:
   divergences: >-
     The formalization uses a finite quiver, hence permits directed parallel
     edges, and defines the group combinatorially through Mathlib's free
-    groupoid. It does not formalize a topological realization of the graph or
-    identify this group with a topological fundamental group. The rank is
-    written as E + 1 - V in Nat to avoid an ambiguous truncated subtraction.
-    The path-lifting cover is a quiver covering; it is not asserted here to be
-    a topological universal cover.
+    groupoid. It currently supplies the quotient realization and canonical
+    comparison homomorphism, but does not yet identify this group with a
+    topological fundamental group by an isomorphism: the topological
+    normal-form proof remains future work. The rank is written as E + 1 - V
+    in Nat to avoid an ambiguous truncated subtraction. The path-lifting cover
+    is a quiver covering; it is not asserted here to be a topological universal
+    cover.
 
 review:
   status: "self-assessed"
@@ -112,10 +128,11 @@ review:
     exact Comparator correspondence for all three public statements. The
     proof was audited for sorries and
     custom axioms and built from the pinned Lean/Mathlib dependency closure.
-    The repository presents the formal object as combinatorial and explicitly
-    records the missing topological realization rather than identifying the
-    result with an unformalized topological fundamental group; the checked
-    combinatorial covering construction is recorded separately in `Cover.lean`.
+    The repository records the standard quotient graph realization and its
+    canonical map into Mathlib's topological fundamental groupoid, while
+    explicitly identifying the comparison-isomorphism proof as open work; the
+    checked combinatorial covering construction is recorded separately in
+    `Cover.lean`.
 
 alignment:
   namespace: "FiniteGraphFreeGroup"
@@ -136,4 +153,4 @@ alignment:
       status: "proved"
       note: "The free-group computation is sharpened to the tree/triviality criterion."
 
-acknowledgements: "Mathlib contributors for the free-group, free-groupoid, and Nielsen-Schreier infrastructure; the Palomar Registry project for the statement/solution Comparator workflow; and Allen Hatcher for the cited standard graph computation."
+acknowledgements: "Mathlib contributors for the free-group, free-groupoid, Nielsen-Schreier, quotient-topology, path, and fundamental-groupoid infrastructure; the Palomar Registry project for the statement/solution Comparator workflow; and Allen Hatcher for the cited standard graph computation and geometric graph model."
