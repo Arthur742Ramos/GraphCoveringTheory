@@ -1,4 +1,5 @@
-import FiniteGraphFreeGroup.Proof
+import FiniteGraphFreeGroup.Consequences
+import FiniteGraphFreeGroup.Cover
 
 /-!
 # Proved solution

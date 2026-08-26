@@ -1,11 +1,19 @@
 {
   "challenge_module": "Challenge",
   "solution_module": "Solution",
-  "theorem_names": ["FiniteGraphFreeGroup.graph_fundamental_group_free_rank"],
+  "theorem_names": [
+    "FiniteGraphFreeGroup.graph_fundamental_group_free_rank",
+    "FiniteGraphFreeGroup.graphFundamentalGroup_subsingleton_iff_cycleRank_zero",
+    "FiniteGraphFreeGroup.graphCoverProjection_isCovering"
+  ],
   "definition_names": [
     "FiniteGraphFreeGroup.vertexCount",
     "FiniteGraphFreeGroup.edgeCount",
-    "FiniteGraphFreeGroup.graphFundamentalGroup"
+    "FiniteGraphFreeGroup.cycleRank",
+    "FiniteGraphFreeGroup.graphFundamentalGroup",
+    "FiniteGraphFreeGroup.graphCoverVertex",
+    "FiniteGraphFreeGroup.graphCoverQuiver",
+    "FiniteGraphFreeGroup.graphCoverProjection"
   ],
   "permitted_axioms": ["propext", "Quot.sound", "Classical.choice"],
   "enable_nanoda": true

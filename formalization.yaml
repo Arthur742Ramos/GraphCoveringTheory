@@ -2,14 +2,17 @@
 version: "v0.4"
 
 project:
-  name: "Finite graph fundamental groups"
+  name: "Finite graph fundamental groups: an explicit spanning-tree basis"
   description: >-
-    Formalizes the combinatorial fundamental group of a finite weakly connected
-    quiver graph as the endomorphism group at a chosen root in Mathlib's free
-    groupoid, proving an explicit group equivalence with
-    `FreeGroup (Fin (E + 1 - V))`. Here `E + 1 - V` is the natural-number
-    encoding of E - V + 1; connectivity and the certified spanning tree provide
-    the required inequality. No topological realization is formalized.
+    Formalizes the spanning-tree computation for the combinatorial fundamental
+    group of a finite weakly connected directed multigraph. The endomorphism
+    group at a chosen root in Mathlib's free groupoid is equipped with an
+    explicit non-tree-edge basis and an explicit equivalence with
+    `FreeGroup (Fin (E + 1 - V))`. The development also proves the cycle-rank
+    identities, root-change equivalences, the tree/triviality criterion, and
+    the corresponding abelianization statement. It additionally constructs a
+    path-lifting quiver and verifies its covering property. No topological
+    realization is formalized.
   authors:
     - "Arthur Freitas Ramos"
   license: "Apache-2.0"
@@ -37,6 +40,24 @@ sources:
     relationship: "adapts"
     note: "The proof uses Mathlib's Nielsen-Schreier infrastructure and free-group basis API."
     license: "Apache-2.0"
+  - title: "Mathlib CategoryTheory.Groupoid.FreeGroupoid"
+    type: "formalization"
+    location: "https://github.com/leanprover-community/mathlib4/blob/v4.32.0/Mathlib/CategoryTheory/Groupoid/FreeGroupoid.lean"
+    relationship: "adapts"
+    note: "The combinatorial fundamental group is the vertex group in Mathlib's free groupoid, whose universal property supplies the path reduction and functorial infrastructure."
+    license: "Apache-2.0"
+  - title: "Mathlib Combinatorics.Quiver.Arborescence"
+    type: "formalization"
+    location: "https://github.com/leanprover-community/mathlib4/blob/v4.32.0/Mathlib/Combinatorics/Quiver/Arborescence.lean"
+    relationship: "adapts"
+    note: "Mathlib's geodesic subtree is used as the certified spanning tree, including its unique-path property and edge count."
+    license: "Apache-2.0"
+  - title: "Mathlib Combinatorics.Quiver.Covering"
+    type: "formalization"
+    location: "https://github.com/leanprover-community/mathlib4/blob/v4.32.0/Mathlib/Combinatorics/Quiver/Covering.lean"
+    relationship: "adapts"
+    note: "The path-lifting construction is packaged as a prefunctor and its star/costar bijections are checked using Mathlib's covering interface."
+    license: "Apache-2.0"
 
 related_formalizations: []
 
@@ -45,11 +66,15 @@ status:
     The proof covers finite directed multigraphs represented by quivers with
     finite vertex and edge types, assuming connectivity after symmetrizing
     edges. It defines the combinatorial fundamental group as the endomorphism
-    group at a root in the free groupoid and proves it is equivalent to a free
-    group of rank E + 1 - V. The natural-number spelling accounts for
-    truncation. A topological graph realization, universal-cover construction,
-    and a bare equality between groups are not formalized; the result is an
-    explicit Lean group equivalence.
+    group at a root in the free groupoid, constructs the non-tree-edge basis,
+    proves its cardinality, and derives the explicit free-group, root-change,
+    cycle-rank, triviality, and abelianization results. It also constructs a
+    path-lifting quiver over the graph and proves the projection is a quiver
+    covering by explicit star and costar equivalences. The natural-number
+    spelling accounts for truncated subtraction. A topological graph
+    realization, a comparison with Mathlib's topological `FundamentalGroup`,
+    and the theorem that this cover is a connected simply connected universal
+    cover are not formalized.
   sorry_count: 0
   sorry_in_definitions: 0
   axioms: []
@@ -75,12 +100,22 @@ fidelity:
     groupoid. It does not formalize a topological realization of the graph or
     identify this group with a topological fundamental group. The rank is
     written as E + 1 - V in Nat to avoid an ambiguous truncated subtraction.
+    The path-lifting cover is a quiver covering; it is not asserted here to be
+    a topological universal cover.
 
 review:
   status: "self-assessed"
   reviewers:
     - "none"
-  notes: "The Challenge statement was kept separate from the proof and checked for exact Comparator correspondence; the solution was audited for sorries and custom axioms and built from a fresh pinned checkout."
+  notes: >-
+    The Challenge statement was kept separate from the proof and checked for
+    exact Comparator correspondence for all three public statements. The
+    proof was audited for sorries and
+    custom axioms and built from the pinned Lean/Mathlib dependency closure.
+    The repository presents the formal object as combinatorial and explicitly
+    records the missing topological realization rather than identifying the
+    result with an unformalized topological fundamental group; the checked
+    combinatorial covering construction is recorded separately in `Cover.lean`.
 
 alignment:
   namespace: "FiniteGraphFreeGroup"
@@ -89,6 +124,16 @@ alignment:
       lean: "FiniteGraphFreeGroup.graph_fundamental_group_free_rank"
       module: "Solution.lean"
       status: "proved"
-      note: "The Lean theorem is the explicit combinatorial free-group rank statement described in the project scope."
+      note: "The Lean theorem is the explicit combinatorial free-group rank statement; Consequences.lean exposes its spanning-tree basis and formal consequences."
+    - source: "Mathlib Combinatorics.Quiver.Covering"
+      lean: "FiniteGraphFreeGroup.graphCoverProjection_isCovering"
+      module: "FiniteGraphFreeGroup/Cover.lean"
+      status: "proved"
+      note: "The path-lifting projection has explicit bijections on every star and costar."
+    - source: "Hatcher, Algebraic Topology, Section 1.2, spanning trees and graphs"
+      lean: "FiniteGraphFreeGroup.graphFundamentalGroup_subsingleton_iff_cycleRank_zero"
+      module: "FiniteGraphFreeGroup/Consequences.lean"
+      status: "proved"
+      note: "The free-group computation is sharpened to the tree/triviality criterion."
 
 acknowledgements: "Mathlib contributors for the free-group, free-groupoid, and Nielsen-Schreier infrastructure; the Palomar Registry project for the statement/solution Comparator workflow; and Allen Hatcher for the cited standard graph computation."

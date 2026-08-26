@@ -1,1 +1,2 @@
-import FiniteGraphFreeGroup.Proof
+import FiniteGraphFreeGroup.Consequences
+import FiniteGraphFreeGroup.Cover
