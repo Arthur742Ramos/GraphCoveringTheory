@@ -4,22 +4,19 @@ version: "v0.4"
 project:
   name: "Finite graph fundamental groups: combinatorial and geometric models"
   description: >-
-    Formalizes the spanning-tree computation for the combinatorial fundamental
-    group of a finite weakly connected directed multigraph. The endomorphism
-    group at a chosen root in Mathlib's free groupoid is equipped with an
-    explicit non-tree-edge basis and an explicit equivalence with
-    `FreeGroup (Fin (E + 1 - V))`. The development also proves the cycle-rank
-    identities, root-change equivalences, the tree/triviality criterion, and
-    the corresponding abelianization statement. It additionally constructs a
-    path-lifting quiver and verifies its covering property, and defines the
-    standard quotient realization by interval edge-cells. The geometric layer
-    proves its endpoint invariant, vertex injectivity, edge paths,
-    path-connectedness, finite compactness, and the canonical comparison map
-    into Mathlib's topological `FundamentalGroupoid`. The realization of an
-    arborescence is additionally proved contractible by an explicit quotient
-    homotopy, hence simply connected. The verified topological covering and
-    monodromy argument then prove that the comparison is an isomorphism and
-    derive the free-group rank theorem for the topological fundamental group.
+    Formalizes the fundamental group of a finite connected graph, represented
+    as a finite weakly connected directed multigraph with its standard
+    interval-cell quotient realization. The main result identifies the
+    topological fundamental group at a chosen vertex with
+    `FreeGroup (Fin (E + 1 - V))`. The proof compares the topological group
+    with the endomorphism group at the root in Mathlib's free groupoid, whose
+    explicit spanning-tree basis supplies the non-tree-edge generators. The
+    development also proves the cycle-rank identities, root-change
+    equivalences, the tree/triviality criterion, and the corresponding
+    abelianization statement. It constructs a path-lifting quiver and verifies
+    its covering property; the realization of that cover is proved
+    contractible by an explicit quotient homotopy, and path lifting plus
+    monodromy completes the comparison isomorphism.
   authors:
     - "Arthur Freitas Ramos"
     - "David Hulak"
