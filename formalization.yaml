@@ -1,125 +1,94 @@
 # yaml-language-server: $schema=https://raw.githubusercontent.com/mathlib-initiative/formalization.yaml/main/schema/formalization.schema.json
-# formalization.yaml v0.4. Replace every TEMPLATE value before submitting.
-# Replace a placeholder list with [] only when its adjacent comment permits it;
-# lists described as required must remain nonempty.
 version: "v0.4"
 
 project:
-  name: "TEMPLATE: name of the formalization"
+  name: "Finite graph fundamental groups"
   description: >-
-    TEMPLATE: concise public account of the mathematical content and principal
-    results of the formalization
-  # Required nonempty list of name strings or mappings with a nonempty name.
+    Formalizes the combinatorial fundamental group of a finite weakly connected
+    quiver graph as the endomorphism group at a chosen root in Mathlib's free
+    groupoid, proving an explicit group equivalence with
+    `FreeGroup (Fin (E + 1 - V))`. Here `E + 1 - V` is the natural-number
+    encoding of E - V + 1; connectivity and the certified spanning tree provide
+    the required inequality. No topological realization is formalized.
   authors:
-    - "TEMPLATE: formalizer name"
-  # Required root licence. Keep this in sync with the Apache-2.0 LICENSE file.
+    - "Arthur Freitas Ramos"
   license: "Apache-2.0"
-  # Required nonempty list of name strings or mappings with a nonempty name.
-  # For a thin wrapper, name people responsible for this submitted wrapper;
-  # submission authorization separately covers the underlying formalization.
   responsible_maintainers:
-    - "TEMPLATE: person responsible for this formalization"
-
-# Omit repository for an ordinary project: Palomar treats this submitted
-# repository as the substantive proof development. If this repository is only
-# a thin Comparator wrapper, uncomment and pin the actual formalization in this
-# exact shape:
-# repository:
-#   substantive_formalization:
-#     id: "TEMPLATE: owner/repository or https://github.com/owner/repository"
-#     revision: "TEMPLATE: full 40-character lowercase commit SHA"
+    - "Arthur Freitas Ramos"
 
 classification:
-  # Use 1–2 official arXiv identifiers such as math.LO and 1–8 five-character
-  # MSC 2020 identifiers such as 03B35.
-  arxiv: ["TEMPLATE: official arXiv identifier such as math.LO"]
-  msc2020: ["TEMPLATE: five-character MSC 2020 identifier such as 03B35"]
+  arxiv: ["math.AT", "math.LO"]
+  msc2020: ["05C25", "18B40", "20F65"]
 
 sources:
-  # Sources must be nonempty. Every source needs a title and relationship; the
-  # relationship must be exactly formalizes, adapts, independently-proves,
-  # background, or other.
-  # Choose one result origin:
-  # - For a theorem first presented by this formalization, set one source to
-  #   type: original-proof and relationship: other. All additional source
-  #   relationships must be background or other.
-  # - Otherwise, omit type: original-proof and give at least one source a
-  #   formalizes, adapts, or independently-proves relationship. A new proof of
-  #   a known published result is source-based and uses independently-proves.
-  # Type, authors, contributors, id, location, note, license, and
-  # author_endorsement are optional; remove them when genuinely inapplicable.
-  # Authors are bibliographic authors. Contributors record other source roles,
-  # with one name and free-form role such as editor or problem-proposer.
-  # Type is a concise free-text
-  # description such as article, paper, book, formalization, web post, folklore,
-  # conversation, or other. The exact value original-proof is reserved for the
-  # result-origin declaration described above.
-  # Original-result example:
-  # - title: "TEMPLATE: describe the result first presented here"
-  #   type: original-proof
-  #   relationship: other
-  - title: "TEMPLATE: title of the mathematical source"
+  - title: "Algebraic Topology"
     authors:
-      - "TEMPLATE: source author"
-    contributors:
-      - name: "TEMPLATE: source contributor"
-        role: "TEMPLATE: contributor role, for example editor or problem-proposer"
-    id: "TEMPLATE: stable identifier or versioned URL"
-    type: "TEMPLATE: concise source kind, for example article, book, or formalization"
-    location: "TEMPLATE: stable URL or bibliographic location, if available"
-    relationship: "TEMPLATE: formalizes, adapts, independently-proves, background, or other"
-    note: "TEMPLATE: explain relationship or author_endorsement: other; otherwise remove"
-    license: "TEMPLATE: source license or unknown"
-    author_endorsement: "TEMPLATE: participated, endorsed, no-response, not-contacted, declined, n/a, or other"
+      - "Allen Hatcher"
+    id: "ISBN 978-0-521-79540-1"
+    type: "book"
+    location: "https://pi.math.cornell.edu/~hatcher/AT/AT.pdf"
+    relationship: "independently-proves"
+    note: "The formalization gives the standard spanning-tree computation of the fundamental group of a connected graph and constructs the equivalence explicitly in Lean."
+    license: "unknown"
+    author_endorsement: "not-contacted"
+  - title: "Mathlib GroupTheory.FreeGroup.NielsenSchreier"
+    type: "formalization"
+    location: "https://github.com/leanprover-community/mathlib4/blob/v4.32.0/Mathlib/GroupTheory/FreeGroup/NielsenSchreier.lean"
+    relationship: "adapts"
+    note: "The proof uses Mathlib's Nielsen-Schreier infrastructure and free-group basis API."
+    license: "Apache-2.0"
 
-related_formalizations:
-  # Remove this field or use [] when none are known.
-  - id: "TEMPLATE: stable URL or identifier for earlier formalization"
-    relationship: "TEMPLATE: builds-on, adapts, independent, supersedes, or other"
-    note: "TEMPLATE: explain the relationship"
+related_formalizations: []
 
 status:
   scope: >-
-    TEMPLATE: state exactly what is and is not formalized, including any weaker
-    theorem, changed hypotheses, or omitted material.
-  # Count the proof development, excluding Challenge.lean's deliberate sorry.
-  # Replace each count with an unquoted nonnegative integer, for example 0.
-  sorry_count: "TEMPLATE: unquoted nonnegative integer"
-  sorry_in_definitions: "TEMPLATE: unquoted nonnegative integer"
-  axioms: ["TEMPLATE: declaration names, or replace this list with []"]
-  # status.main_results is optional. Add it only when a short curated
-  # project-level list is useful; it need not mirror Comparator declarations.
+    The proof covers finite directed multigraphs represented by quivers with
+    finite vertex and edge types, assuming connectivity after symmetrizing
+    edges. It defines the combinatorial fundamental group as the endomorphism
+    group at a root in the free groupoid and proves it is equivalent to a free
+    group of rank E + 1 - V. The natural-number spelling accounts for
+    truncation. A topological graph realization, universal-cover construction,
+    and a bare equality between groups are not formalized; the result is an
+    explicit Lean group equivalence.
+  sorry_count: 0
+  sorry_in_definitions: 0
+  axioms: []
 
 automation:
   methods:
-    - method: "TEMPLATE: manual, copilot, agent, autonomous, or other"
-      models: ["TEMPLATE: model names, or replace this list with []"]
-      framework: "TEMPLATE: framework name, or n/a"
-      tool_setup: "TEMPLATE: exact detail, such as AI-assisted, editors, tactics, agents, or other tools used"
+    - method: "agent-assisted"
+      models: ["GPT-5 Codex"]
+      framework: "Lean 4 and Mathlib"
+      tool_setup: "AI-assisted API exploration and proof development, with targeted lake builds and independent Comparator checks."
       cost:
-        wall_time: "TEMPLATE: approximate elapsed effort"
-        spend_usd: "TEMPLATE: amount, subscription-based, or not tracked"
-        hardware: "TEMPLATE: local machine, API-only, or other"
-      prompting_notes: "TEMPLATE: representative prompting notes, or n/a"
-  spend_usd: "TEMPLATE: total amount, subscription-based, or not tracked"
-  notes: "TEMPLATE: describe the overall human and automation workflow"
+        wall_time: "not tracked"
+        spend_usd: "subscription-based"
+        hardware: "local machine"
+      prompting_notes: "The proof was developed against the pinned Lean and Mathlib APIs and checked by the Lean kernel."
+  spend_usd: "subscription-based"
+  notes: "The formalization was developed interactively, then checked with a fresh pinned dependency manifest and the repository's reproducible verification scripts."
 
 fidelity:
-  divergences: "TEMPLATE: all known divergences from the cited source, or none known"
+  divergences: >-
+    The formalization uses a finite quiver, hence permits directed parallel
+    edges, and defines the group combinatorially through Mathlib's free
+    groupoid. It does not formalize a topological realization of the graph or
+    identify this group with a topological fundamental group. The rank is
+    written as E + 1 - V in Nat to avoid an ambiguous truncated subtraction.
 
 review:
-  status: "TEMPLATE: honest review status, for example self-assessed"
+  status: "self-assessed"
   reviewers:
-    - "TEMPLATE: reviewer name, or none"
-  notes: "TEMPLATE: describe statement audits and mathematical review performed"
+    - "none"
+  notes: "The Challenge statement was kept separate from the proof and checked for exact Comparator correspondence; the solution was audited for sorries and custom axioms and built from a fresh pinned checkout."
 
 alignment:
-  namespace: "TEMPLATE: project namespace"
+  namespace: "FiniteGraphFreeGroup"
   statements:
-    - source: "TEMPLATE: source theorem or section"
-      lean: "TEMPLATE: fully qualified Lean declaration"
-      module: "TEMPLATE: Lean module containing the declaration"
-      status: "TEMPLATE: proved, partial, adapted, or other honest description"
-      note: "TEMPLATE: explain the correspondence and any qualifications"
+    - source: "Hatcher, Algebraic Topology, Section 1.2, spanning trees and graphs"
+      lean: "FiniteGraphFreeGroup.graph_fundamental_group_free_rank"
+      module: "Solution.lean"
+      status: "proved"
+      note: "The Lean theorem is the explicit combinatorial free-group rank statement described in the project scope."
 
-acknowledgements: "TEMPLATE: libraries, tools, and people to credit"
+acknowledgements: "Mathlib contributors for the free-group, free-groupoid, and Nielsen-Schreier infrastructure; the Palomar Registry project for the statement/solution Comparator workflow; and Allen Hatcher for the cited standard graph computation."

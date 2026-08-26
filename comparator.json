@@ -1,8 +1,12 @@
 {
   "challenge_module": "Challenge",
   "solution_module": "Solution",
-  "theorem_names": ["PalomarTemplate.main_result"],
-  "definition_names": [],
+  "theorem_names": ["FiniteGraphFreeGroup.graph_fundamental_group_free_rank"],
+  "definition_names": [
+    "FiniteGraphFreeGroup.vertexCount",
+    "FiniteGraphFreeGroup.edgeCount",
+    "FiniteGraphFreeGroup.graphFundamentalGroup"
+  ],
   "permitted_axioms": ["propext", "Quot.sound", "Classical.choice"],
   "enable_nanoda": true
 }
