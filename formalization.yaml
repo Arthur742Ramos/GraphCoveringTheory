@@ -2,100 +2,90 @@
 version: "v0.4"
 
 project:
-  name: "Finite graph fundamental groups: combinatorial and geometric models"
+  name: "Schreier index formula via finite covering graphs"
   description: >-
-    Formalizes the fundamental group of a finite connected graph, represented
-    as a finite weakly connected directed multigraph with its standard
-    interval-cell quotient realization. The main result identifies the
-    topological fundamental group at a chosen vertex with
-    `FreeGroup (Fin (E + 1 - V))`. The proof compares the topological group
-    with the endomorphism group at the root in Mathlib's free groupoid, whose
-    explicit spanning-tree basis supplies the non-tree-edge generators. The
-    development also proves the cycle-rank identities, root-change
-    equivalences, the tree/triviality criterion, and the corresponding
-    abelianization statement. It constructs a path-lifting quiver and verifies
-    its covering property; the realization of that cover is proved
-    contractible by an explicit quotient homotopy, and path lifting plus
-    monodromy completes the comparison isomorphism.
+    Formalizes the sharp Schreier index formula for a finite-index subgroup of
+    a finite-rank free group. For n > 0, a subgroup H of FreeGroup (Fin n)
+    with finite index d is proved equivalent, as a group, to
+    FreeGroup (Fin (1 + d * (n - 1))). The proof realizes H as the vertex
+    group of the finite action-groupoid covering on the coset space, verifies
+    the covering locally by explicit star and costar bijections, and counts
+    the complement of a geodesic spanning tree. The repository also exposes
+    the truncation-safe natural-number statement and the generic finite
+    free-groupoid rank calculation used by the submission theorem.
   authors:
     - "Arthur Freitas Ramos"
-    - "David Hulak"
-    - "Ruy de Queiroz"
+    - "David Barros Hulak"
+    - "Ruy J. G. B. de Queiroz"
   license: "Apache-2.0"
   responsible_maintainers:
     - "Arthur Freitas Ramos"
-    - "David Hulak"
-    - "Ruy de Queiroz"
 
 classification:
-  arxiv: ["math.AT", "math.LO"]
-  msc2020: ["05C25", "18B40", "20F65"]
+  arxiv: ["math.GR", "math.AT", "math.LO"]
+  msc2020: ["20E07", "05C25", "18B40"]
 
 sources:
-  - title: "Algebraic Topology"
+  - title: "Die Untergruppen der freien Gruppen"
     authors:
-      - "Allen Hatcher"
-    id: "ISBN 978-0-521-79540-1"
-    type: "book"
-    location: "https://pi.math.cornell.edu/~hatcher/AT/AT.pdf"
+      - "Otto Schreier"
+    id: "10.1007/BF02952517"
+    type: "article"
+    location: "https://eudml.org/doc/168236"
     relationship: "independently-proves"
-    note: "The formalization gives the standard spanning-tree computation of the fundamental group of a connected graph and constructs the equivalence explicitly in Lean."
+    note: "The classical source for the finite-index rank formula formalized here."
     license: "unknown"
     author_endorsement: "not-contacted"
   - title: "Mathlib GroupTheory.FreeGroup.NielsenSchreier"
     type: "formalization"
     location: "https://github.com/leanprover-community/mathlib4/blob/v4.32.0/Mathlib/GroupTheory/FreeGroup/NielsenSchreier.lean"
     relationship: "adapts"
-    note: "The proof uses Mathlib's Nielsen-Schreier infrastructure and free-group basis API."
+    note: "Provides the free-group and free-groupoid infrastructure, including the action-groupoid perspective on Nielsen--Schreier."
     license: "Apache-2.0"
-  - title: "Mathlib CategoryTheory.Groupoid.FreeGroupoid"
+    author_endorsement: "not-contacted"
+  - title: "Mathlib GroupTheory.Schreier"
     type: "formalization"
-    location: "https://github.com/leanprover-community/mathlib4/blob/v4.32.0/Mathlib/CategoryTheory/Groupoid/FreeGroupoid.lean"
-    relationship: "adapts"
-    note: "The combinatorial fundamental group is the vertex group in Mathlib's free groupoid, whose universal property supplies the path reduction and functorial infrastructure."
+    location: "https://github.com/leanprover-community/mathlib4/blob/v4.32.0/Mathlib/GroupTheory/Schreier.lean"
+    relationship: "extends"
+    note: "The current API supplies finite-generation and an upper bound; this development proves the sharp equality for finite-index subgroups of free groups."
     license: "Apache-2.0"
-  - title: "Mathlib AlgebraicTopology.FundamentalGroupoid.FundamentalGroup"
-    type: "formalization"
-    location: "https://github.com/leanprover-community/mathlib4/blob/v4.32.0/Mathlib/AlgebraicTopology/FundamentalGroupoid/FundamentalGroup.lean"
-    relationship: "adapts"
-    note: "The geometric layer targets Mathlib's topological fundamental group and uses its path-homotopy quotient and induced homomorphism API."
-    license: "Apache-2.0"
-  - title: "Mathlib Combinatorics.Quiver.Arborescence"
-    type: "formalization"
-    location: "https://github.com/leanprover-community/mathlib4/blob/v4.32.0/Mathlib/Combinatorics/Quiver/Arborescence.lean"
-    relationship: "adapts"
-    note: "Mathlib's geodesic subtree is used as the certified spanning tree, including its unique-path property and edge count."
-    license: "Apache-2.0"
+    author_endorsement: "not-contacted"
   - title: "Mathlib Combinatorics.Quiver.Covering"
     type: "formalization"
     location: "https://github.com/leanprover-community/mathlib4/blob/v4.32.0/Mathlib/Combinatorics/Quiver/Covering.lean"
     relationship: "adapts"
-    note: "The path-lifting construction is packaged as a prefunctor and its star/costar bijections are checked using Mathlib's covering interface."
+    note: "The finite Schreier graph is packaged as a quiver covering of the rose, with explicit star and costar equivalences."
     license: "Apache-2.0"
+    author_endorsement: "not-contacted"
+  - title: "Mathlib Combinatorics.Quiver.Arborescence"
+    type: "formalization"
+    location: "https://github.com/leanprover-community/mathlib4/blob/v4.32.0/Mathlib/Combinatorics/Quiver/Arborescence.lean"
+    relationship: "adapts"
+    note: "A geodesic arborescence supplies the certified spanning tree whose complement is counted."
+    license: "Apache-2.0"
+    author_endorsement: "not-contacted"
+  - title: "Finite graph fundamental groups: combinatorial and geometric models"
+    type: "formalization"
+    location: "https://github.com/Arthur742Ramos/finite-graph-fundamental-group"
+    relationship: "extends"
+    note: "Reuses the earlier kernel-checked finite-graph spanning-tree basis and develops its covering-graph sequel."
+    license: "Apache-2.0"
+    author_endorsement: "not-contacted"
 
 related_formalizations: []
 
 status:
   scope: >-
-    The proof covers finite directed multigraphs represented by quivers with
-    finite vertex and edge types, assuming connectivity after symmetrizing
-    edges. It defines the combinatorial fundamental group as the endomorphism
-    group at a root in the free groupoid, constructs the non-tree-edge basis,
-    proves its cardinality, and derives the explicit free-group, root-change,
-    cycle-rank, triviality, and abelianization results. It also constructs a
-    path-lifting quiver over the graph and proves the projection is a quiver
-    covering by explicit star and costar equivalences. The geometric
-    realization is the quotient of the discrete vertex summand and one unit
-    interval per edge, with the two endpoint identifications. Its proved API
-    includes endpoint-label invariance, injective vertex points, explicit
-    edge-cell paths, path-connectedness under weak connectivity, compactness
-    for finite graphs, and the canonical homomorphism to Mathlib's topological
-    fundamental group. The realization of an arborescence is contractible and
-    simply connected by an explicit cellwise quotient contraction. The
-    topological comparison is proved bijective via path lifting, the
-    contractible cover, and monodromy, yielding the explicit free-group
-    equivalence. The natural-number spelling accounts for truncated
-    subtraction.
+    The primary theorem covers every n > 0 and every subgroup H of
+    FreeGroup (Fin n) carrying Mathlib's finite-index typeclass. It proves an
+    explicit group equivalence with FreeGroup (Fin (1 + H.index * (n - 1))).
+    Internally, the all-n truncation-safe form uses the rank expression
+    H.index * n + 1 - H.index. The proof constructs the coset action groupoid,
+    verifies its rose covering by bijective stars and costars, identifies its
+    root endomorphism group with H, and applies a certified spanning-tree
+    complement count. The repository does not claim the full classification of
+    all pointed covers, regular-cover/deck-group correspondence, or a
+    topological cover classification; those are natural follow-on modules.
   sorry_count: 1
   sorry_in_definitions: 0
   axioms: []
@@ -105,71 +95,65 @@ automation:
     - method: "agent-assisted"
       models: ["GPT-5 Codex"]
       framework: "Lean 4 and Mathlib"
-      tool_setup: "AI-assisted API exploration and proof development, with targeted lake builds and independent Comparator checks."
+      tool_setup: "Pinned Lean/Mathlib builds, kernel checking, closure-safe Challenge compilation, and Comparator/NanoDa replay."
       cost:
         wall_time: "not tracked"
         spend_usd: "subscription-based"
         hardware: "local machine"
       prompting_notes: "The proof was developed against the pinned Lean and Mathlib APIs and checked by the Lean kernel."
   spend_usd: "subscription-based"
-  notes: "The formalization was developed interactively, then checked with a fresh pinned dependency manifest and the repository's reproducible verification scripts."
+  notes: "The public statement is isolated from candidate-local implementation modules; the solution imports the reusable covering and spanning-tree development."
 
 fidelity:
   divergences: >-
-    The formalization uses a finite quiver, hence permits directed parallel
-    edges, and defines the graph group combinatorially through Mathlib's free
-    groupoid before identifying it with the topological fundamental group of
-    the quotient realization. The topological comparison is presented through
-    an explicit path-lifting cover with contractible realization; the proof
-    uses Mathlib's covering and monodromy interfaces rather than postulating a
-    universal-cover object. The rank is written as E + 1 - V in Nat to avoid
-    an ambiguous truncated subtraction. The one deliberate `sorry` is only in
-    the Palomar statement surface `Challenge.lean`; the proved library and
-    `Solution.lean` contain no proof holes or custom axioms.
+    The formalization states group equivalence rather than only equality of
+    abstract ranks, and uses finite free groups indexed by Fin. The positive
+    hypothesis is explicit because natural-number subtraction is truncated;
+    the implementation also proves the equivalent all-n truncation-safe form.
+    The finite covering is the action groupoid on the right coset quotient
+    supplied by Mathlib, with a rose as base. This is the finite Schreier graph
+    construction, not a claim to have formalized the entire topological
+    subgroup-cover correspondence.
 
 review:
   status: "self-assessed"
   reviewers:
     - "none"
   notes: >-
-    The Challenge statement was kept separate from the proof and checked for
-    exact Comparator correspondence for the public headline statement. The
-    proof was audited for sorries and
-    custom axioms and built from the pinned Lean/Mathlib dependency closure.
-    The repository records the standard quotient graph realization and its
-    canonical map into Mathlib's topological fundamental groupoid, while
-    recording the comparison proof and its path-lifting/monodromy argument in
-    `TopologicalComparison.lean`. The arborescence realization is separately
-    certified contractible and simply connected in `TreeContraction.lean`; the
-    checked combinatorial covering construction is recorded in `Cover.lean`.
+    The Challenge theorem is a small, closure-safe statement surface with one
+    deliberate proof hole, while Solution and the implementation library are
+    proof-hole-free. The core covering maps, free-groupoid generators, vertex
+    count, edge count, subgroup identification, and final reindexing
+    equivalence are checked by Lean's kernel against the pinned dependency
+    closure. No custom axioms are introduced.
 
 alignment:
-  namespace: "FiniteGraphFreeGroup"
+  namespace: "GraphCoveringTheory"
   statements:
-    - source: "Hatcher, Algebraic Topology, Section 1.2, spanning trees and graphs"
-      lean: "FiniteGraphFreeGroup.graphFundamentalGroupEquiv_nonempty"
-      module: "FiniteGraphFreeGroup/Consequences.lean"
-      status: "proved"
-      note: "The combinatorial free-group model is exposed through the spanning-tree basis and an explicit equivalence."
-    - source: "Mathlib Combinatorics.Quiver.Covering"
-      lean: "FiniteGraphFreeGroup.graphCoverProjection_isCovering"
-      module: "FiniteGraphFreeGroup/Cover.lean"
-      status: "proved"
-      note: "The path-lifting projection has explicit bijections on every star and costar."
-    - source: "Mathlib AlgebraicTopology.FundamentalGroupoid.SimplyConnected"
-      lean: "FiniteGraphFreeGroup.graphRealization_tree_simplyConnected"
-      module: "FiniteGraphFreeGroup/TreeContraction.lean"
-      status: "proved"
-      note: "An explicit quotient homotopy contracts the interval-cell realization of every arborescence to its root, and Mathlib derives simple connectedness."
-    - source: "Hatcher, Algebraic Topology, Section 1.2, spanning trees and graphs"
-      lean: "FiniteGraphFreeGroup.graphFundamentalGroup_subsingleton_iff_cycleRank_zero"
-      module: "FiniteGraphFreeGroup/Consequences.lean"
-      status: "proved"
-      note: "The free-group computation is sharpened to the tree/triviality criterion."
-    - source: "Hatcher, Algebraic Topology, Section 1.2, spanning trees and graphs"
-      lean: "FiniteGraphFreeGroup.graph_fundamental_group_free_rank"
+    - source: "Schreier, Die Untergruppen der freien Gruppen"
+      lean: "GraphCoveringTheory.schreier_index_formula"
       module: "Solution.lean"
       status: "proved"
-      note: "The quotient realization's topological fundamental group is explicitly equivalent to the free group of rank E + 1 - V."
+      note: "For positive finite rank n, a finite-index subgroup of FreeGroup (Fin n) is free of rank 1 + index * (n - 1)."
+    - source: "Mathlib Combinatorics.Quiver.Covering"
+      lean: "GraphCoveringTheory.coverProjection_isCovering"
+      module: "GraphCoveringTheory/SchreierCover.lean"
+      status: "proved"
+      note: "The explicit Schreier graph projection has bijective star and costar maps."
+    - source: "Mathlib CategoryTheory.Groupoid.FreeGroupoid"
+      lean: "GraphCoveringTheory.freeGroupoid_end_free_rank"
+      module: "GraphCoveringTheory/IndexFormula.lean"
+      status: "proved"
+      note: "A finite connected free groupoid endomorphism group is computed from the complement of a geodesic spanning tree."
+    - source: "Mathlib GroupTheory.FreeGroup.NielsenSchreier"
+      lean: "GraphCoveringTheory.freeActionGroupoidIsFree"
+      module: "GraphCoveringTheory/SchreierCover.lean"
+      status: "proved"
+      note: "The action groupoid is given an explicit generator quiver indexed by the original free-group generators."
+    - source: "Finite graph fundamental groups: combinatorial and geometric models"
+      lean: "FiniteGraphFreeGroup.spanningTreeBasis"
+      module: "FiniteGraphFreeGroup/Proof.lean"
+      status: "adapts"
+      note: "The prior finite-graph basis API is reused for the new finite covering graph."
 
-acknowledgements: "Mathlib contributors for the free-group, free-groupoid, Nielsen-Schreier, quotient-topology, path, and fundamental-groupoid infrastructure; the Palomar Registry project for the statement/solution Comparator workflow; and Allen Hatcher for the cited standard graph computation and geometric graph model."
+acknowledgements: "Mathlib contributors for the free-group, free-groupoid, quiver-covering, arborescence, quotient, and finite-type infrastructure; the Palomar Registry project for the statement/solution Comparator workflow; Otto Schreier for the classical theorem; and the contributors to the preceding finite-graph formalization."

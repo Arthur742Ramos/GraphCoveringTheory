@@ -1,6 +1,6 @@
-name = "FiniteGraphFreeGroup"
+name = "GraphCoveringTheory"
 version = "0.1.0"
-defaultTargets = ["FiniteGraphFreeGroup", "Challenge", "Solution"]
+defaultTargets = ["FiniteGraphFreeGroup", "GraphCoveringTheory", "Challenge", "Solution"]
 
 [[require]]
 name = "mathlib"
@@ -9,6 +9,10 @@ rev = "v4.32.0"
 
 [[lean_lib]]
 name = "FiniteGraphFreeGroup"
+
+[[lean_lib]]
+name = "GraphCoveringTheory"
+roots = ["GraphCoveringTheory"]
 
 [[lean_lib]]
 name = "Challenge"
