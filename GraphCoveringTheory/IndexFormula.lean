@@ -162,13 +162,13 @@ lemma generatorComplement_card (G : Type u) [Groupoid G]
   rw [hcomp, hS]
   omega
 
-theorem freeGroupoid_end_free_rank (G : Type u) [Groupoid G]
+theorem freeGroupoid_end_free_basis (G : Type u) [Groupoid G]
     [IsFreeGroupoid G] [IsConnected G]
     [Fintype (IsFreeGroupoid.Generators G)]
     [∀ a b : IsFreeGroupoid.Generators G, Fintype (a ⟶ b)] (r : G) :
-    Nonempty (End r ≃* FreeGroup (Fin
+    Nonempty (FreeGroupBasis (Fin
       (Fintype.card (Quiver.Total (IsFreeGroupoid.Generators G)) + 1 -
-        Fintype.card (IsFreeGroupoid.Generators G)))) := by
+        Fintype.card (IsFreeGroupoid.Generators G))) (End r)) := by
   let T : WideSubquiver (Symmetrify (IsFreeGroupoid.Generators G)) :=
     @geodesicSubtree
       (Symmetrify (IsFreeGroupoid.Generators G))
@@ -192,124 +192,168 @@ theorem freeGroupoid_end_free_rank (G : Type u) [Groupoid G]
       (Fintype.card (Quiver.Total (IsFreeGroupoid.Generators G)) + 1 -
         Fintype.card (IsFreeGroupoid.Generators G)) :=
     hcard ▸ Fintype.equivFin X
-  exact ⟨(B.reindex eX).repr⟩
+  exact ⟨B.reindex eX⟩
 
-theorem schreier_index_formula_nat (n : ℕ) (H : Subgroup (FreeGroup (Fin n)))
-    [H.FiniteIndex] :
-    Nonempty (H ≃* FreeGroup (Fin (H.index * n + 1 - H.index))) := by
-  letI : Fintype (FreeGroup (Fin n) ⧸ H) := H.fintypeQuotientOfFiniteIndex
-  letI : Nonempty (FreeGroup (Fin n) ⧸ H) :=
-    ⟨((1 : FreeGroup (Fin n)) : FreeGroup (Fin n) ⧸ H)⟩
-  letI : MulAction.IsPretransitive (FreeGroup (Fin n)) (FreeGroup (Fin n) ⧸ H) :=
-    MulAction.isPretransitive_quotient (FreeGroup (Fin n)) H
+theorem freeGroupoid_end_free_rank (G : Type u) [Groupoid G]
+    [IsFreeGroupoid G] [IsConnected G]
+    [Fintype (IsFreeGroupoid.Generators G)]
+    [∀ a b : IsFreeGroupoid.Generators G, Fintype (a ⟶ b)] (r : G) :
+    Nonempty (End r ≃* FreeGroup (Fin
+      (Fintype.card (Quiver.Total (IsFreeGroupoid.Generators G)) + 1 -
+        Fintype.card (IsFreeGroupoid.Generators G)))) := by
+  rcases freeGroupoid_end_free_basis G r with ⟨B⟩
+  exact ⟨B.repr⟩
+
+theorem schreier_basis_fintype (α : Type u) [Fintype α]
+    (H : Subgroup (FreeGroup α)) [H.FiniteIndex] :
+    Nonempty (FreeGroupBasis
+      (Fin (H.index * Fintype.card α + 1 - H.index)) H) := by
+  letI : Fintype (FreeGroup α ⧸ H) := H.fintypeQuotientOfFiniteIndex
+  letI : Nonempty (FreeGroup α ⧸ H) :=
+    ⟨((1 : FreeGroup α) : FreeGroup α ⧸ H)⟩
+  letI : MulAction.IsPretransitive (FreeGroup α) (FreeGroup α ⧸ H) :=
+    MulAction.isPretransitive_quotient (FreeGroup α) H
   letI : IsConnected
-      (ActionCategory (FreeGroup (Fin n)) (FreeGroup (Fin n) ⧸ H)) :=
+      (ActionCategory (FreeGroup α) (FreeGroup α ⧸ H)) :=
     zigzag_isConnected fun x y =>
       Relation.ReflTransGen.single <|
         Or.inl <| nonempty_subtype.mpr
-          (show _ from MulAction.exists_smul_eq
-            (FreeGroup (Fin n)) x.back y.back)
+          (show _ from MulAction.exists_smul_eq (FreeGroup α) x.back y.back)
   letI : IsFreeGroupoid
-      (ActionCategory (FreeGroup (Fin n)) (FreeGroup (Fin n) ⧸ H)) :=
-    freeActionGroupoidIsFree (Fin n) (FreeGroup (Fin n) ⧸ H)
-  letI : Fintype (ActionCategory (FreeGroup (Fin n)) (FreeGroup (Fin n) ⧸ H)) :=
-    actionCategoryFintype (FreeGroup (Fin n)) (FreeGroup (Fin n) ⧸ H)
+      (ActionCategory (FreeGroup α) (FreeGroup α ⧸ H)) :=
+    freeActionGroupoidIsFree α (FreeGroup α ⧸ H)
+  letI : Fintype (ActionCategory (FreeGroup α) (FreeGroup α ⧸ H)) :=
+    actionCategoryFintype (FreeGroup α) (FreeGroup α ⧸ H)
   letI : Fintype
       (IsFreeGroupoid.Generators
-        (ActionCategory (FreeGroup (Fin n)) (FreeGroup (Fin n) ⧸ H))) :=
-    Fintype.ofEquiv (FreeGroup (Fin n) ⧸ H)
-      (ActionCategory.objEquiv (FreeGroup (Fin n)) (FreeGroup (Fin n) ⧸ H))
+        (ActionCategory (FreeGroup α) (FreeGroup α ⧸ H))) :=
+    Fintype.ofEquiv (FreeGroup α ⧸ H)
+      (ActionCategory.objEquiv (FreeGroup α) (FreeGroup α ⧸ H))
   letI : ∀ a b : IsFreeGroupoid.Generators
-      (ActionCategory (FreeGroup (Fin n)) (FreeGroup (Fin n) ⧸ H)), Fintype (a ⟶ b) :=
-    fun a b => coverHomFintype (Fin n) (FreeGroup (Fin n) ⧸ H) a b
-  letI : Fintype (Quiver.Total (CoverVertex (Fin n) (FreeGroup (Fin n) ⧸ H))) :=
+      (ActionCategory (FreeGroup α) (FreeGroup α ⧸ H)), Fintype (a ⟶ b) :=
+    fun a b => coverHomFintype α (FreeGroup α ⧸ H) a b
+  letI : Fintype (Quiver.Total (CoverVertex α (FreeGroup α ⧸ H))) :=
     FiniteGraphFreeGroup.baseTotalFintype
   letI : Fintype
-      (@Quiver.Total (CoverVertex (Fin n) (FreeGroup (Fin n) ⧸ H))
-        (freeActionGroupoidIsFree (Fin n) (FreeGroup (Fin n) ⧸ H)).quiverGenerators) :=
+      (@Quiver.Total (CoverVertex α (FreeGroup α ⧸ H))
+        (freeActionGroupoidIsFree α (FreeGroup α ⧸ H)).quiverGenerators) :=
     Fintype.ofEquiv
-      ((FreeGroup (Fin n) ⧸ H) × Fin n)
-      (freeActionGeneratorTotalEquiv (Fin n) (FreeGroup (Fin n) ⧸ H)).symm
+      ((FreeGroup α ⧸ H) × α)
+      (freeActionGeneratorTotalEquiv α (FreeGroup α ⧸ H)).symm
   letI : Fintype
       (Quiver.Total
         (IsFreeGroupoid.Generators
-          (ActionCategory (FreeGroup (Fin n)) (FreeGroup (Fin n) ⧸ H)))) :=
+          (ActionCategory (FreeGroup α) (FreeGroup α ⧸ H)))) :=
     FiniteGraphFreeGroup.baseTotalFintype
-  let r : ActionCategory (FreeGroup (Fin n)) (FreeGroup (Fin n) ⧸ H) :=
-    ActionCategory.objEquiv (FreeGroup (Fin n)) (FreeGroup (Fin n) ⧸ H)
-      ((1 : FreeGroup (Fin n)) : FreeGroup (Fin n) ⧸ H)
+  let r : ActionCategory (FreeGroup α) (FreeGroup α ⧸ H) :=
+    ActionCategory.objEquiv (FreeGroup α) (FreeGroup α ⧸ H)
+      ((1 : FreeGroup α) : FreeGroup α ⧸ H)
   have hconn : IsConnected
-      (ActionCategory (FreeGroup (Fin n)) (FreeGroup (Fin n) ⧸ H)) := inferInstance
-  have h := @freeGroupoid_end_free_rank
-    (ActionCategory (FreeGroup (Fin n)) (FreeGroup (Fin n) ⧸ H))
+      (ActionCategory (FreeGroup α) (FreeGroup α ⧸ H)) := inferInstance
+  have h := @freeGroupoid_end_free_basis
+    (ActionCategory (FreeGroup α) (FreeGroup α ⧸ H))
     (by infer_instance)
-    (freeActionGroupoidIsFree (Fin n) (FreeGroup (Fin n) ⧸ H))
+    (freeActionGroupoidIsFree α (FreeGroup α ⧸ H))
     hconn
     (by infer_instance)
-    (by exact fun a b => coverHomFintype (Fin n) (FreeGroup (Fin n) ⧸ H) a b)
+    (by exact fun a b => coverHomFintype α (FreeGroup α ⧸ H) a b)
     r
   have hvertices : Fintype.card
       (IsFreeGroupoid.Generators
-      (ActionCategory (FreeGroup (Fin n)) (FreeGroup (Fin n) ⧸ H))) = H.index := by
-    change Fintype.card (ActionCategory (FreeGroup (Fin n)) (FreeGroup (Fin n) ⧸ H)) = H.index
+      (ActionCategory (FreeGroup α) (FreeGroup α ⧸ H))) = H.index := by
+    change Fintype.card (ActionCategory (FreeGroup α) (FreeGroup α ⧸ H)) = H.index
     calc
-      Fintype.card (ActionCategory (FreeGroup (Fin n)) (FreeGroup (Fin n) ⧸ H)) =
-          Fintype.card (FreeGroup (Fin n) ⧸ H) :=
+      Fintype.card (ActionCategory (FreeGroup α) (FreeGroup α ⧸ H)) =
+          Fintype.card (FreeGroup α ⧸ H) :=
         Fintype.card_congr (ActionCategory.objEquiv
-          (FreeGroup (Fin n)) (FreeGroup (Fin n) ⧸ H)).symm
-      _ = Nat.card (FreeGroup (Fin n) ⧸ H) := Nat.card_eq_fintype_card.symm
+          (FreeGroup α) (FreeGroup α ⧸ H)).symm
+      _ = Nat.card (FreeGroup α ⧸ H) := Nat.card_eq_fintype_card.symm
       _ = H.index := (Subgroup.index_eq_card H).symm
-  have hquotient : Fintype.card (FreeGroup (Fin n) ⧸ H) = H.index := by
+  have hquotient : Fintype.card (FreeGroup α ⧸ H) = H.index := by
     calc
-      Fintype.card (FreeGroup (Fin n) ⧸ H) =
-          Nat.card (FreeGroup (Fin n) ⧸ H) := Nat.card_eq_fintype_card.symm
+      Fintype.card (FreeGroup α ⧸ H) =
+          Nat.card (FreeGroup α ⧸ H) := Nat.card_eq_fintype_card.symm
       _ = H.index := (Subgroup.index_eq_card H).symm
   have hedges : Fintype.card
       (Quiver.Total
         (IsFreeGroupoid.Generators
-          (ActionCategory (FreeGroup (Fin n)) (FreeGroup (Fin n) ⧸ H)))) =
-      H.index * n := by
+          (ActionCategory (FreeGroup α) (FreeGroup α ⧸ H)))) =
+      H.index * Fintype.card α := by
     have htotal : Fintype.card
         (Quiver.Total
           (IsFreeGroupoid.Generators
-            (ActionCategory (FreeGroup (Fin n)) (FreeGroup (Fin n) ⧸ H)))) =
-        Fintype.card ((FreeGroup (Fin n) ⧸ H) × Fin n) :=
-      Fintype.card_congr (freeActionGeneratorTotalEquiv (Fin n)
-        (FreeGroup (Fin n) ⧸ H))
+            (ActionCategory (FreeGroup α) (FreeGroup α ⧸ H)))) =
+        Fintype.card ((FreeGroup α ⧸ H) × α) :=
+      Fintype.card_congr (freeActionGeneratorTotalEquiv α
+        (FreeGroup α ⧸ H))
     rw [htotal]
-    simp only [Fintype.card_prod, Fintype.card_fin]
+    simp only [Fintype.card_prod]
     simp [hquotient]
-  rcases h with ⟨e⟩
+  rcases h with ⟨B⟩
   have e' : End r ≃* H := by
     simpa [r] using (ActionCategory.endMulEquivSubgroup H)
   have hdim :
       Fintype.card (Quiver.Total
           (IsFreeGroupoid.Generators
-            (ActionCategory (FreeGroup (Fin n)) (FreeGroup (Fin n) ⧸ H)))) + 1 -
+            (ActionCategory (FreeGroup α) (FreeGroup α ⧸ H)))) + 1 -
           Fintype.card (IsFreeGroupoid.Generators
-            (ActionCategory (FreeGroup (Fin n)) (FreeGroup (Fin n) ⧸ H))) =
-        H.index * n + 1 - H.index := by
+            (ActionCategory (FreeGroup α) (FreeGroup α ⧸ H))) =
+        H.index * Fintype.card α + 1 - H.index := by
     rw [hedges, hvertices]
-  have e0 : End r ≃* FreeGroup (Fin (H.index * n + 1 - H.index)) := by
-    rw [hdim] at e
-    exact e
-  exact ⟨e'.symm.trans e0⟩
+  rw [hdim] at B
+  exact ⟨B.map e'⟩
+
+theorem schreier_index_formula_fintype (α : Type u) [Fintype α]
+    (H : Subgroup (FreeGroup α)) [H.FiniteIndex] :
+    Nonempty (H ≃* FreeGroup (Fin
+      (H.index * Fintype.card α + 1 - H.index))) := by
+  rcases schreier_basis_fintype α H with ⟨B⟩
+  exact ⟨B.repr⟩
+
+theorem schreier_index_formula_nat (n : ℕ) (H : Subgroup (FreeGroup (Fin n)))
+    [H.FiniteIndex] :
+    Nonempty (H ≃* FreeGroup (Fin (H.index * n + 1 - H.index))) := by
+  letI : Fintype (Fin n) := Fin.fintype n
+  have h := schreier_index_formula_fintype (Fin n) H
+  rw [Fintype.card_fin] at h
+  exact h
+
+theorem schreier_basis_fintype_proved (α : Type u) [Fintype α]
+    [Nonempty α] (H : Subgroup (FreeGroup α)) [H.FiniteIndex] :
+    Nonempty (FreeGroupBasis
+      (Fin (1 + H.index * (Fintype.card α - 1))) H) := by
+  rcases schreier_basis_fintype α H with ⟨B⟩
+  have hα : 0 < Fintype.card α := Fintype.card_pos_iff.mpr inferInstance
+  have hm : H.index * (Fintype.card α - 1) =
+      H.index * Fintype.card α - H.index := by
+    rw [Nat.sub_one]
+    exact Nat.mul_pred H.index (Fintype.card α)
+  have hindex : H.index * Fintype.card α + 1 - H.index =
+      1 + H.index * (Fintype.card α - 1) := by
+    calc
+      H.index * Fintype.card α + 1 - H.index =
+          1 + H.index * Fintype.card α - H.index := by
+        rw [Nat.add_comm (H.index * Fintype.card α) 1]
+      _ = 1 + (H.index * Fintype.card α - H.index) :=
+        Nat.add_sub_assoc (Nat.le_mul_of_pos_right H.index hα) 1
+      _ = 1 + H.index * (Fintype.card α - 1) := by rw [← hm]
+  rw [hindex] at B
+  exact ⟨B⟩
+
+theorem schreier_index_formula_fintype_proved (α : Type u) [Fintype α]
+    [Nonempty α] (H : Subgroup (FreeGroup α)) [H.FiniteIndex] :
+    Nonempty (H ≃* FreeGroup (Fin
+      (1 + H.index * (Fintype.card α - 1)))) := by
+  rcases schreier_basis_fintype_proved α H with ⟨B⟩
+  exact ⟨B.repr⟩
 
 theorem schreier_index_formula_proved (n : ℕ)
     (H : Subgroup (FreeGroup (Fin n))) [H.FiniteIndex] (hn : 0 < n) :
     Nonempty (H ≃* FreeGroup (Fin (1 + H.index * (n - 1)))) := by
-  have h := schreier_index_formula_nat n H
-  have hm : H.index * (n - 1) = H.index * n - H.index := by
-    rw [Nat.sub_one]
-    exact Nat.mul_pred H.index n
-  have hindex : H.index * n + 1 - H.index = 1 + H.index * (n - 1) := by
-    calc
-      H.index * n + 1 - H.index = 1 + H.index * n - H.index := by
-        rw [Nat.add_comm (H.index * n) 1]
-      _ = 1 + (H.index * n - H.index) :=
-        Nat.add_sub_assoc (Nat.le_mul_of_pos_right H.index hn) 1
-      _ = 1 + H.index * (n - 1) := by rw [← hm]
-  rw [hindex] at h
+  letI : Fintype (Fin n) := Fin.fintype n
+  letI : Nonempty (Fin n) := ⟨⟨0, hn⟩⟩
+  have h := schreier_index_formula_fintype_proved (Fin n) H
+  rw [Fintype.card_fin] at h
   exact h
 
 end GraphCoveringTheory

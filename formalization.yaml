@@ -5,14 +5,16 @@ project:
   name: "Schreier index formula via finite covering graphs"
   description: >-
     Formalizes the sharp Schreier index formula for a finite-index subgroup of
-    a finite-rank free group. For n > 0, a subgroup H of FreeGroup (Fin n)
-    with finite index d is proved equivalent, as a group, to
-    FreeGroup (Fin (1 + d * (n - 1))). The proof realizes H as the vertex
-    group of the finite action-groupoid covering on the coset space, verifies
-    the covering locally by explicit star and costar bijections, and counts
-    the complement of a geodesic spanning tree. The repository also exposes
-    the truncation-safe natural-number statement and the generic finite
-    free-groupoid rank calculation used by the submission theorem.
+    a free group on a finite nonempty generating type. For a finite nonempty
+    type alpha, a subgroup H of FreeGroup alpha with finite index d is proved
+    equivalent, as a group, to FreeGroup (Fin (1 + d * (card alpha - 1))).
+    More strongly, the repository exposes a FreeGroupBasis for H with this
+    indexing type. The proof realizes H as the vertex group of the finite
+    action-groupoid covering on the coset space, verifies the covering locally
+    by explicit star and costar bijections, and counts the complement of a
+    geodesic spanning tree. It also exposes the truncation-safe natural-number
+    statement and the generic finite free-groupoid rank calculation used by
+    the submission theorem.
   authors:
     - "Arthur Freitas Ramos"
     - "David Barros Hulak"
@@ -76,16 +78,19 @@ related_formalizations: []
 
 status:
   scope: >-
-    The primary theorem covers every n > 0 and every subgroup H of
-    FreeGroup (Fin n) carrying Mathlib's finite-index typeclass. It proves an
-    explicit group equivalence with FreeGroup (Fin (1 + H.index * (n - 1))).
-    Internally, the all-n truncation-safe form uses the rank expression
-    H.index * n + 1 - H.index. The proof constructs the coset action groupoid,
-    verifies its rose covering by bijective stars and costars, identifies its
-    root endomorphism group with H, and applies a certified spanning-tree
-    complement count. The repository does not claim the full classification of
-    all pointed covers, regular-cover/deck-group correspondence, or a
-    topological cover classification; those are natural follow-on modules.
+    The primary theorem covers every finite nonempty generating type alpha and
+    every subgroup H of FreeGroup alpha carrying Mathlib's finite-index
+    typeclass. It proves an explicit group equivalence with FreeGroup (Fin (1 +
+    H.index * (Fintype.card alpha - 1))) and, internally, a FreeGroupBasis
+    indexed by that type. The all-finite-type truncation-safe form uses the
+    rank expression H.index * Fintype.card alpha + 1 - H.index. The proof
+    constructs the coset action groupoid, verifies its rose covering by
+    bijective stars and costars, identifies its root endomorphism group with H,
+    and applies a certified spanning-tree complement count. The earlier
+    FreeGroup (Fin n) theorem is retained as a specialization. The repository
+    does not claim the full classification of all pointed covers,
+    regular-cover/deck-group correspondence, or a topological cover
+    classification; those are natural follow-on modules.
   sorry_count: 1
   sorry_in_definitions: 0
   axioms: []
@@ -134,7 +139,12 @@ alignment:
       lean: "GraphCoveringTheory.schreier_index_formula"
       module: "Solution.lean"
       status: "proved"
-      note: "For positive finite rank n, a finite-index subgroup of FreeGroup (Fin n) is free of rank 1 + index * (n - 1)."
+      note: "For every finite nonempty generating type alpha, a finite-index subgroup of FreeGroup alpha is free of rank 1 + index * (Fintype.card alpha - 1)."
+    - source: "Schreier, Die Untergruppen der freien Gruppen"
+      lean: "GraphCoveringTheory.schreier_basis_fintype_proved"
+      module: "GraphCoveringTheory/IndexFormula.lean"
+      status: "proved"
+      note: "The covering proof exposes a FreeGroupBasis for the subgroup, indexed by the non-tree edges of the finite Schreier graph after finite reindexing."
     - source: "Mathlib Combinatorics.Quiver.Covering"
       lean: "GraphCoveringTheory.coverProjection_isCovering"
       module: "GraphCoveringTheory/SchreierCover.lean"
@@ -145,6 +155,11 @@ alignment:
       module: "GraphCoveringTheory/IndexFormula.lean"
       status: "proved"
       note: "A finite connected free groupoid endomorphism group is computed from the complement of a geodesic spanning tree."
+    - source: "Mathlib CategoryTheory.Groupoid.FreeGroupoid"
+      lean: "GraphCoveringTheory.freeGroupoid_end_free_basis"
+      module: "GraphCoveringTheory/IndexFormula.lean"
+      status: "proved"
+      note: "The same spanning-tree argument returns the actual FreeGroupBasis before its rank equivalence is extracted."
     - source: "Mathlib GroupTheory.FreeGroup.NielsenSchreier"
       lean: "GraphCoveringTheory.freeActionGroupoidIsFree"
       module: "GraphCoveringTheory/SchreierCover.lean"

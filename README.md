@@ -1,26 +1,34 @@
 # Schreier index formula via finite covering graphs
 
-This repository formalizes the sharp finite-index formula for finite-rank free
-groups. For a positive integer `n`, a subgroup `H ≤ FreeGroup (Fin n)` of
-finite index `d` is proved to be free of rank `1 + d * (n - 1)`:
+This repository formalizes the sharp finite-index formula for free groups on
+finite generating types. For a finite nonempty type `α`, a subgroup
+`H ≤ FreeGroup α` of finite index `d` is proved to be free of rank
+`1 + d * (Fintype.card α - 1)`:
 
 ```lean
-Nonempty (H ≃* FreeGroup (Fin (1 + H.index * (n - 1))))
+Nonempty (H ≃* FreeGroup (Fin (1 + H.index * (Fintype.card α - 1))))
 ```
+
+More strongly, the implementation exposes a `FreeGroupBasis` for `H` with
+exactly that finite index type. Its generators are obtained from the edges
+outside a certified geodesic spanning tree in the finite coset Schreier
+covering. The earlier `FreeGroup (Fin n)` theorem remains available as a
+specialization, including the truncation-safe statement valid when `n = 0`.
 
 The proof follows the covering-graph argument. The coset action of the free
 group gives a finite action groupoid, viewed as the Schreier covering of the
-`n`-petalled rose. Its root endomorphism group is identified with `H`; an
-explicit generating quiver has `d` vertices and `d * n` directed edges; and a
-Mathlib geodesic spanning tree leaves exactly `1 + d * (n - 1)` free
-generators. The implementation first proves the truncation-safe all-`n`
-statement
+`α`-petalled rose. Its root endomorphism group is identified with `H`; an
+explicit generating quiver has `d` vertices and `d * Fintype.card α` directed
+edges; and a Mathlib geodesic spanning tree leaves exactly
+`1 + d * (Fintype.card α - 1)` free generators. The implementation first
+proves the truncation-safe statement
 
 ```lean
-Nonempty (H ≃* FreeGroup (Fin (H.index * n + 1 - H.index)))
+Nonempty (H ≃* FreeGroup
+  (Fin (H.index * Fintype.card α + 1 - H.index)))
 ```
 
-and derives the usual formula under `0 < n`.
+and derives the usual formula when `α` is nonempty.
 
 ## Repository map
 
@@ -30,7 +38,8 @@ and derives the usual formula under `0 < n`.
   its rose projection, explicit star/costar equivalences, and the
   generator-preserving free-groupoid instance.
 - `GraphCoveringTheory/IndexFormula.lean` proves the spanning-tree count,
-  subgroup identification, and index formula.
+  exposes the resulting finite Schreier basis, and proves the subgroup
+  identification and index formula.
 - `FiniteGraphFreeGroup/` is the reusable finite-graph basis development from
   the preceding project.
 - `comparator.json` records the exact Challenge/Solution correspondence.
@@ -40,7 +49,8 @@ and derives the usual formula under `0 < n`.
 The repository does not claim the full classification of all pointed covers,
 regular-cover/deck-group correspondence, or a topological cover
 classification. Those are natural follow-on modules; the present entry keeps
-the primary theorem sharp and the proof independently checkable.
+the primary theorem sharp, gives the actual Schreier basis, and remains
+independently checkable.
 
 ## Verification
 

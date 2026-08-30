@@ -4,6 +4,8 @@ open FreeGroup
 
 noncomputable section
 
+universe u
+
 namespace GraphCoveringTheory
 
 /-!
@@ -14,9 +16,9 @@ is supplied by the finite Schreier covering construction in
 `GraphCoveringTheory.IndexFormula`.
 -/
 
-theorem schreier_index_formula (n : ℕ) (H : Subgroup (FreeGroup (Fin n)))
-    [H.FiniteIndex] (hn : 0 < n) :
-    Nonempty (H ≃* FreeGroup (Fin (1 + H.index * (n - 1)))) := by
-  exact schreier_index_formula_proved n H hn
+theorem schreier_index_formula (α : Type u) [Fintype α] [Nonempty α]
+    (H : Subgroup (FreeGroup α)) [H.FiniteIndex] :
+    Nonempty (H ≃* FreeGroup (Fin (1 + H.index * (Fintype.card α - 1)))) := by
+  exact schreier_index_formula_fintype_proved α H
 
 end GraphCoveringTheory
