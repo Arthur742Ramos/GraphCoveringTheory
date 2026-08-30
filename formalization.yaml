@@ -14,7 +14,9 @@ project:
     by explicit star and costar bijections, and counts the complement of a
     geodesic spanning tree. It also exposes the truncation-safe natural-number
     statement and the generic finite free-groupoid rank calculation used by
-    the submission theorem.
+    the submission theorem. For finite-index normal subgroups, a companion
+    module proves that every deck transformation of the finite Schreier action
+    is a unique right translation by the quotient group.
   authors:
     - "Arthur Freitas Ramos"
     - "David Barros Hulak"
@@ -66,6 +68,13 @@ sources:
     note: "A geodesic arborescence supplies the certified spanning tree whose complement is counted."
     license: "Apache-2.0"
     author_endorsement: "not-contacted"
+  - title: "Mathlib CategoryTheory.Action.Concrete"
+    type: "formalization"
+    location: "https://github.com/leanprover-community/mathlib4/blob/v4.32.0/Mathlib/CategoryTheory/Action/Concrete.lean"
+    relationship: "extends"
+    note: "Finite action and quotient-action infrastructure is used to identify the regular Schreier deck group with the quotient."
+    license: "Apache-2.0"
+    author_endorsement: "not-contacted"
   - title: "Finite graph fundamental groups: combinatorial and geometric models"
     type: "formalization"
     location: "https://github.com/Arthur742Ramos/finite-graph-fundamental-group"
@@ -87,10 +96,13 @@ status:
     constructs the coset action groupoid, verifies its rose covering by
     bijective stars and costars, identifies its root endomorphism group with H,
     and applies a certified spanning-tree complement count. The earlier
-    FreeGroup (Fin n) theorem is retained as a specialization. The repository
-    does not claim the full classification of all pointed covers,
-    regular-cover/deck-group correspondence, or a topological cover
-    classification; those are natural follow-on modules.
+    FreeGroup (Fin n) theorem is retained as a specialization. In the regular
+    finite case, `GraphCoveringTheory.finiteIndexQuotientDeckGroupEquiv` proves that the
+    deck transformations of the finite Schreier action are exactly the
+    quotient group acting by right translations. The repository does not
+    claim the full classification of all pointed covers, the general
+    normalizer formula for arbitrary subgroups, or a topological cover
+    classification.
   sorry_count: 1
   sorry_in_definitions: 0
   axioms: []
@@ -170,5 +182,10 @@ alignment:
       module: "FiniteGraphFreeGroup/Proof.lean"
       status: "adapts"
       note: "The prior finite-graph basis API is reused for the new finite covering graph."
+    - source: "Mathlib CategoryTheory.Action.Concrete"
+      lean: "GraphCoveringTheory.finiteIndexQuotientDeckGroupEquiv"
+      module: "GraphCoveringTheory/Deck.lean"
+      status: "proved"
+      note: "For a finite-index normal subgroup, right translations identify the quotient group with all automorphisms of the finite Schreier action."
 
 acknowledgements: "Mathlib contributors for the free-group, free-groupoid, quiver-covering, arborescence, quotient, and finite-type infrastructure; the Palomar Registry project for the statement/solution Comparator workflow; Otto Schreier for the classical theorem; and the contributors to the preceding finite-graph formalization."

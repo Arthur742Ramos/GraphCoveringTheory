@@ -15,6 +15,18 @@ outside a certified geodesic spanning tree in the finite coset Schreier
 covering. The earlier `FreeGroup (Fin n)` theorem remains available as a
 specialization, including the truncation-safe statement valid when `n = 0`.
 
+The regular-cover consequence is formalized too. If `H` is normal, the
+automorphism group of the finite Schreier action is proved equivalent to the
+quotient group:
+
+```lean
+GraphCoveringTheory.finiteIndexQuotientDeckGroupEquiv G H :
+  G ⧸ H ≃* GraphCoveringTheory.SchreierDeckGroup G H
+```
+
+Thus every deck transformation is a unique right translation, not merely an
+element of a quotient action.
+
 The proof follows the covering-graph argument. The coset action of the free
 group gives a finite action groupoid, viewed as the Schreier covering of the
 `α`-petalled rose. Its root endomorphism group is identified with `H`; an
@@ -40,6 +52,8 @@ and derives the usual formula when `α` is nonempty.
 - `GraphCoveringTheory/IndexFormula.lean` proves the spanning-tree count,
   exposes the resulting finite Schreier basis, and proves the subgroup
   identification and index formula.
+- `GraphCoveringTheory/Deck.lean` identifies the deck group of a finite
+  regular Schreier action with its quotient group.
 - `FiniteGraphFreeGroup/` is the reusable finite-graph basis development from
   the preceding project.
 - `comparator.json` records the exact Challenge/Solution correspondence.
@@ -47,10 +61,10 @@ and derives the usual formula when `α` is nonempty.
   status.
 
 The repository does not claim the full classification of all pointed covers,
-regular-cover/deck-group correspondence, or a topological cover
-classification. Those are natural follow-on modules; the present entry keeps
-the primary theorem sharp, gives the actual Schreier basis, and remains
-independently checkable.
+the general normalizer formula for arbitrary (not necessarily regular)
+subgroups, or a topological cover classification. The regular quotient case
+is proved for the finite Schreier action, while those broader statements
+remain natural follow-on modules.
 
 ## Verification
 
