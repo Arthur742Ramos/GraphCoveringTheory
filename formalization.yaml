@@ -2,21 +2,20 @@
 version: "v0.4"
 
 project:
-  name: "Schreier index formula via finite covering graphs"
+  name: "Schreier and Kurosh subgroup theorems via covering graphs"
   description: >-
-    Formalizes the sharp Schreier index formula for a finite-index subgroup of
-    a free group on a finite nonempty generating type. For a finite nonempty
-    type alpha, a subgroup H of FreeGroup alpha with finite index d is proved
-    equivalent, as a group, to FreeGroup (Fin (1 + d * (card alpha - 1))).
-    More strongly, the repository exposes a FreeGroupBasis for H with this
-    indexing type. The proof realizes H as the vertex group of the finite
-    action-groupoid covering on the coset space, verifies the covering locally
-    by explicit star and costar bijections, and counts the complement of a
-    geodesic spanning tree. It also exposes the truncation-safe natural-number
-    statement and the generic finite free-groupoid rank calculation used by
-    the submission theorem. For finite-index normal subgroups, a companion
-    module proves that every deck transformation of the finite Schreier action
-    is a unique right translation by the quotient group.
+    Formalizes the sharp Schreier index formula for finite-index subgroups of
+    free groups and the Kurosh subgroup theorem for arbitrary subgroups of
+    indexed free products. The Schreier proof realizes a subgroup as the
+    vertex group of a finite action-groupoid covering, while the Kurosh proof
+    constructs the Bass--Serre tree, a locally bijective graph-of-groups cover,
+    and its path-lifting normal form. The Kurosh factor-only statement is a
+    free product of the nontrivial quotient vertex stabilizers and the free
+    group of the quotient graph; each vertex stabilizer is identified with an
+    intersection with a conjugate of an original factor. For finite-index
+    normal subgroups, a companion module proves that every deck transformation
+    of the finite Schreier action is a unique right translation by the
+    quotient group.
   authors:
     - "Arthur Freitas Ramos"
     - "David Barros Hulak"
@@ -30,6 +29,16 @@ classification:
   msc2020: ["20E07", "05C25", "18B40"]
 
 sources:
+  - title: "Die Untergruppen der freien Produkte von beliebigen Gruppen"
+    authors:
+      - "A. G. Kurosh"
+    id: "EUDML:159700"
+    type: "article"
+    location: "https://eudml.org/doc/159700"
+    relationship: "independently-proves"
+    note: "The classical source for the subgroup theorem for free products formalized in the Bass--Serre development."
+    license: "unknown"
+    author_endorsement: "not-contacted"
   - title: "Die Untergruppen der freien Gruppen"
     authors:
       - "Otto Schreier"
@@ -87,17 +96,17 @@ related_formalizations: []
 
 status:
   scope: >-
-    The primary theorem covers every finite nonempty generating type alpha and
+    The Schreier theorem covers every finite nonempty generating type alpha and
     every subgroup H of FreeGroup alpha carrying Mathlib's finite-index
     typeclass. It proves an explicit group equivalence with FreeGroup (Fin (1 +
     H.index * (Fintype.card alpha - 1))) and, internally, a FreeGroupBasis
-    indexed by that type. The all-finite-type truncation-safe form uses the
-    rank expression H.index * Fintype.card alpha + 1 - H.index. The proof
-    constructs the coset action groupoid, verifies its rose covering by
-    bijective stars and costars, identifies its root endomorphism group with H,
-    and applies a certified spanning-tree complement count. The earlier
-    FreeGroup (Fin n) theorem is retained as a specialization. In the regular
-    finite case, `GraphCoveringTheory.finiteIndexQuotientDeckGroupEquiv` proves that the
+    indexed by that type. The Kurosh theorem covers every subgroup H of an
+    arbitrary indexed free product. Its factor-only product is indexed by the
+    nontrivial vertex stabilizers of the quotient Bass--Serre graph together
+    with the quotient graph's free group, and each such stabilizer is proved
+    equal to `H ∩ g G_i g⁻¹` for some i and g. The direct graph-of-groups form
+    also retains the trivial central stabilizers. In the regular finite case,
+    `GraphCoveringTheory.finiteIndexQuotientDeckGroupEquiv` proves that the
     deck transformations of the finite Schreier action are exactly the
     quotient group acting by right translations. The repository does not
     claim the full classification of all pointed covers, the general
@@ -130,7 +139,11 @@ fidelity:
     The finite covering is the action groupoid on the right coset quotient
     supplied by Mathlib, with a rose as base. This is the finite Schreier graph
     construction, not a claim to have formalized the entire topological
-    subgroup-cover correspondence.
+    subgroup-cover correspondence. The Kurosh statement uses the canonical
+    quotient-vertex stabilizer index rather than choosing a separate
+    double-coset representative for every factor; its accompanying factor
+    theorem proves the equivalent intersection description without making
+    those choices part of the public product type.
 
 review:
   status: "self-assessed"
@@ -139,14 +152,26 @@ review:
   notes: >-
     The Challenge theorem is a small, closure-safe statement surface with one
     deliberate proof hole, while Solution and the implementation library are
-    proof-hole-free. The core covering maps, free-groupoid generators, vertex
-    count, edge count, subgroup identification, and final reindexing
-    equivalence are checked by Lean's kernel against the pinned dependency
-    closure. No custom axioms are introduced.
+    proof-hole-free. The Schreier covering maps, free-groupoid generators,
+    vertex count, edge count, subgroup identification, and final reindexing
+    equivalence are checked by Lean's kernel. The Kurosh development adds a
+    checked Bass--Serre tree, local cover bijections, path lifting, trivial
+    factor removal, and a kernel proof for the graph-of-groups normal form. No
+    custom axioms are introduced.
 
 alignment:
   namespace: "GraphCoveringTheory"
   statements:
+    - source: "Kurosh, Die Untergruppen der freien Produkte von beliebigen Gruppen"
+      lean: "GraphCoveringTheory.Kurosh.kurosh_decomposition"
+      module: "GraphCoveringTheory/KuroshTheorem.lean"
+      status: "proved"
+      note: "Every subgroup of an indexed free product is equivalent to the free product of its nontrivial quotient Bass--Serre vertex stabilizers and the quotient graph's free group."
+    - source: "Kurosh, Die Untergruppen der freien Produkte von beliebigen Gruppen"
+      lean: "GraphCoveringTheory.Kurosh.kurosh_factor_is_conjugate_intersection"
+      module: "GraphCoveringTheory/KuroshTheorem.lean"
+      status: "proved"
+      note: "Each nontrivial quotient vertex stabilizer is identified with an intersection of the subgroup and a conjugate of an original free factor."
     - source: "Schreier, Die Untergruppen der freien Gruppen"
       lean: "GraphCoveringTheory.schreier_index_formula"
       module: "Solution.lean"
@@ -188,4 +213,4 @@ alignment:
       status: "proved"
       note: "For a finite-index normal subgroup, right translations identify the quotient group with all automorphisms of the finite Schreier action."
 
-acknowledgements: "Mathlib contributors for the free-group, free-groupoid, quiver-covering, arborescence, quotient, and finite-type infrastructure; the Palomar Registry project for the statement/solution Comparator workflow; Otto Schreier for the classical theorem; and the contributors to the preceding finite-graph formalization."
+acknowledgements: "Mathlib contributors for the free-group, free-groupoid, quiver-covering, arborescence, quotient, and finite-type infrastructure; the Palomar Registry project for the statement/solution Comparator workflow; A. G. Kurosh and Otto Schreier for the classical subgroup theorems; and the contributors to the preceding finite-graph formalization."

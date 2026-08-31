@@ -1,6 +1,6 @@
 name = "GraphCoveringTheory"
 version = "0.1.0"
-defaultTargets = ["FiniteGraphFreeGroup", "GraphCoveringTheory", "Challenge", "Solution"]
+defaultTargets = ["FiniteGraphFreeGroup", "GraphCoveringTheory", "Challenge", "Solution", "KuroshChallenge", "KuroshSolution"]
 
 [[require]]
 name = "mathlib"
@@ -21,3 +21,11 @@ roots = ["Challenge"]
 [[lean_lib]]
 name = "Solution"
 roots = ["Solution"]
+
+[[lean_lib]]
+name = "KuroshChallenge"
+roots = ["KuroshChallenge"]
+
+[[lean_lib]]
+name = "KuroshSolution"
+roots = ["KuroshSolution"]

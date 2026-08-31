@@ -1,4 +1,4 @@
-# Schreier index formula via finite covering graphs
+# Schreier and Kurosh subgroup theorems via covering graphs
 
 This repository formalizes the sharp finite-index formula for free groups on
 finite generating types. For a finite nonempty type `α`, a subgroup
@@ -27,13 +27,39 @@ GraphCoveringTheory.finiteIndexQuotientDeckGroupEquiv G H :
 Thus every deck transformation is a unique right translation, not merely an
 element of a quotient action.
 
-The proof follows the covering-graph argument. The coset action of the free
-group gives a finite action groupoid, viewed as the Schreier covering of the
-`α`-petalled rose. Its root endomorphism group is identified with `H`; an
-explicit generating quiver has `d` vertices and `d * Fintype.card α` directed
-edges; and a Mathlib geodesic spanning tree leaves exactly
-`1 + d * (Fintype.card α - 1)` free generators. The implementation first
-proves the truncation-safe statement
+## Kurosh expansion
+
+The new Bass--Serre development proves Kurosh's subgroup theorem for an
+arbitrary subgroup of an arbitrary indexed free product. The subgroup acts on
+the explicit Bass--Serre tree, and a locally bijective universal
+graph-of-groups cover is used to prove the normal-form map is an isomorphism.
+
+The factor-only public statement is:
+
+```lean
+GraphCoveringTheory.Kurosh.kurosh_decomposition G H :
+  Nonempty (KuroshActiveProduct G H ≃* H)
+```
+
+`KuroshActiveProduct G H` is the free product of the nontrivial quotient
+vertex stabilizers together with the free group of the quotient graph. Each
+of those vertex stabilizers is proved to be an intersection
+`H ∩ g G_i g⁻¹` for some original free factor. The preceding
+`kurosh_bass_serre_decomposition` theorem retains all quotient-vertex
+stabilizers, including the trivial central ones, and is the direct
+graph-of-groups form of the result. The quotient-vertex indexing avoids
+choosing duplicate representatives; it is the canonical covering-graph
+version of the usual double-coset formulation.
+
+The proof follows the Bass--Serre covering-graph argument. The free product's
+explicit tree has central vertices and factor vertices; after passing to the
+`H`-quotient, its vertex stabilizers supply the graph-of-groups factors and the
+quotient graph supplies the free part. Explicit star and costar bijections,
+path lifting, and the tree's unique-path property prove injectivity of the
+normal-form map, while the factor loops and quotient-graph generators prove
+surjectivity. A final factor-removal equivalence deletes the trivial central
+stabilizers. The finite Schreier construction above separately proves the
+truncation-safe statement
 
 ```lean
 Nonempty (H ≃* FreeGroup
@@ -44,8 +70,9 @@ and derives the usual formula when `α` is nonempty.
 
 ## Repository map
 
-- `Challenge.lean` is the small, closure-safe Palomar statement surface.
-- `Solution.lean` proves exactly the Challenge theorem.
+- `Challenge.lean`/`Solution.lean` remain the small Schreier Palomar surface;
+  `KuroshChallenge.lean`/`KuroshSolution.lean` and
+  `comparator-kurosh.json` provide the corresponding Kurosh surface.
 - `GraphCoveringTheory/SchreierCover.lean` defines the finite Schreier graph,
   its rose projection, explicit star/costar equivalences, and the
   generator-preserving free-groupoid instance.
@@ -54,6 +81,11 @@ and derives the usual formula when `α` is nonempty.
   identification and index formula.
 - `GraphCoveringTheory/Deck.lean` identifies the deck group of a finite
   regular Schreier action with its quotient group.
+- `GraphCoveringTheory/Kurosh.lean` defines the free-product Bass--Serre tree,
+  quotient graph, stabilizers, and graph-of-groups factors.
+- `GraphCoveringTheory/KuroshTheorem.lean` exposes the checked Kurosh
+  decompositions; its supporting modules construct the universal cover,
+  path-lifting normal form, and the trivial-factor reduction.
 - `FiniteGraphFreeGroup/` is the reusable finite-graph basis development from
   the preceding project.
 - `comparator.json` records the exact Challenge/Solution correspondence.
@@ -73,15 +105,17 @@ manifest records the dependency closure.
 
 ```text
 lake build
+cd docbuild && lake build GraphCoveringTheory:docs
+cd ..
 lake env lean --src-deps Challenge.lean
 ruby scripts/validate-formalization.rb
 ./scripts/verify-comparator.sh
 ```
 
-`Challenge.lean` contains one deliberate statement-surface proof hole;
-`Solution.lean` and the implementation library contain no proof holes or
-custom axioms. Comparator checks the headline theorem with Lean's kernel and
-NanoDa.
+Each Challenge file contains one deliberate statement-surface proof hole; the
+Solution files and the implementation library contain no proof holes or
+custom axioms. The two Comparator configurations check their respective
+headline theorems with Lean's kernel and NanoDa.
 
 The repository follows the
 [Palomar statement/solution workflow](https://palomar-registry.org/how-to-submit).
